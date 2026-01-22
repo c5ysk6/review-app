@@ -68,9 +68,6 @@ st.markdown("""
     .step-label { color: #333; font-weight: bold; font-size: 16px; margin-bottom: 8px; display: block; }
     .step-number { color: #D32F2F; font-weight: 900; margin-right: 6px; }
     h3 { color: #D32F2F !important; margin-bottom: 0px !important; }
-    
-    /* 画像の余白を消して幅いっぱいにする調整 */
-    .stImage { margin-top: -20px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -84,13 +81,6 @@ def load_staff_data():
         return {}
 
 staff_data_dict = load_staff_data()
-
-# --- 🖼️ ヘッダー画像（幅いっぱい） ---
-try:
-    # use_container_width=True でスマホ画面の横幅いっぱいに表示
-    st.image("B.jpg", use_container_width=True)
-except:
-    st.markdown("<h1 style='text-align: center;'>EIGHT MEN</h1>", unsafe_allow_html=True)
 
 # --- 📍 店舗選択 ---
 query_params = st.query_params
