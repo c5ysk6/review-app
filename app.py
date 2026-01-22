@@ -24,14 +24,14 @@ STORES = {
 # 店舗名に紐づく「MEOで狙いたい地名・駅名」を定義
 STORE_AREAS = {
     "渋谷店": "渋谷",
-    "池袋西口店": "池袋西口",
-    "池袋東口店": "池袋東口",
+    "池袋西口店": "池袋",
+    "池袋東口店": "池袋",
     "新宿店": "新宿",
     "上野店": "上野",
     "北千住店": "北千住",
     "吉祥寺店": "吉祥寺",
-    "博多店": "博多駅",
-    "那覇新都心店": "那覇新都心・おもろまち",
+    "博多店": "博多",
+    "那覇新都心店": "那覇",
 }
 
 # --- 🎨 ページ設定 & デザイン ---
@@ -109,8 +109,8 @@ st.divider()
 
 # スタッフ選択
 st.caption("担当スタッフ")
-current_staff_list = staff_data_dict.get(selected_store_name, ["指名なし"])
-if not current_staff_list: current_staff_list = ["指名なし"]
+current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
+if not current_staff_list: current_staff_list = ["指定しない"]
 staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
 
 st.write("") 
