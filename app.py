@@ -42,7 +42,7 @@ MOTIVATION_LIST = [
     "その他"
 ]
 
-# 雰囲気・接客リスト（その他を追加）
+# 雰囲気・接客リスト
 ATMOSPHERE_LIST = [
     "丁寧なカウンセリング",
     "会話が楽しく盛り上がった",
@@ -140,15 +140,33 @@ if url_store_param:
             found_store_name = store_key
             break
 
+# ★ここが変更点：店舗が見つかった場合は「ウェルカムカード」を表示して空白を埋める
 if found_store_name:
     selected_store_name = found_store_name
+    
+    # 選択ボックスの代わりに表示する「店舗看板」デザイン
+    st.markdown(f"""
+        <div style="
+            padding: 20px; 
+            border: 2px solid #ffebee; 
+            border-radius: 15px; 
+            background-color: #fffbfb;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <p style="margin: 0 0 5px 0; color: #D32F2F; font-weight: bold; font-size: 12px; letter-spacing: 1px;">WELCOME TO</p>
+            <h3 style="margin: 0; color: #333; font-size: 18px;">📍 {selected_store_name}</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
 else:
+    # 店舗指定がない場合は通常通り選択ボックスを表示
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
+    st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
-st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 # --- 📝 直行ボタン (AIを使わない人用) ---
 st.markdown(f"""
@@ -204,7 +222,7 @@ atmospheres = st.pills(
     label_visibility="collapsed"
 )
 
-# 5. 自由記述（常時表示に変更）
+# 5. 自由記述
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">⑤</span>その他の詳細・一言メモ（任意）</span>', unsafe_allow_html=True)
 free_text = st.text_input(
@@ -218,17 +236,13 @@ submit_button = st.button("口コミを生成する ✨")
 
 # --- 🤖 生成ロジック ---
 if submit_button:
-    # 最低限の入力チェック
     if not menu and not motivations and not atmospheres and not free_text:
         st.warning("項目をいくつか選択するか、一言メモを入力してください")
     else:
         # データ整形
         menu_text = ", ".join(menu) if menu else "カット"
-        
-        # リストから「その他」という文字を除外して、プロンプトに渡す
         clean_motivations = [m for m in motivations if m != "その他"] if motivations else []
         motivation_text = ", ".join(clean_motivations)
-        
         clean_atmospheres = [a for a in atmospheres if a != "その他"] if atmospheres else []
         atmosphere_text = ", ".join(clean_atmospheres) if clean_atmospheres else "良かった"
 
