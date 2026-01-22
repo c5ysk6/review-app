@@ -68,3 +68,131 @@ st.markdown("""
     .step-label { color: #333; font-weight: bold; font-size: 16px; margin-bottom: 8px; display: block; }
     .step-number { color: #D32F2F; font-weight: 900; margin-right: 6px; }
     h3 { color: #D32F2F !important; margin-bottom: 0px !important; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- 📥 データ読み込み ---
+@st.cache_data(ttl=600)
+def load_staff_data():
+    try:
+        df = pd.read_csv(SHEET_URL)
+        return df.groupby('店舗名')['スタッフ名'].apply(list).to_dict()
+    except:
+        return {}
+
+staff_data_dict = load_staff_data()
+
+# --- 🖼️ ロゴ表示（左上に配置変更） ---
+# [1, 3]の割合で分割し、左側の狭いエリアにロゴを置く
+col1, col2 = st.columns([1, 3])
+
+with col1:
+    try:
+        # width=100 でサイズを小さく固定し、左上にアイコン的に表示
+        st.image("IMG_7899.JPG", width=100)
+    except:
+        st.write("EIGHT MEN")
+
+# --- 📍 店舗選択 ---
+query_params = st.query_params
+url_store_param = query_params.get("store")
+found_store_name = None
+
+if url_store_param:
+    for store_key in STORES.keys():
+        if url_store_param in store_key:
+            found_store_name = store_key
+            break
+
+if found_store_name:
+    selected_store_name = found_store_name
+else:
+    # URLにない場合はcol2（ロゴの右側）ではなく、下の段で選択させる
+    # （スマホでのレイアウト崩れを防ぐため）
+    selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
+
+# 店舗名の表示（右側寄せではなく、標準配置で見やすく）
+st.markdown(f"<h3 style='margin-top: 10px;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
+
+selected_store_link = STORES[selected_store_name]
+area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
+
+# --- 📝 直行ボタン ---
+st.markdown(f"""
+<a href="{selected_store_link}" target="_blank" class="direct-link-btn">
+    Googleマップで自分で口コミを書く方はこちら 📝
+</a>
+""", unsafe_allow_html=True)
+
+st.divider()
+st.write("🤖 **AIにお任せする方はこちら**")
+st.write("簡単な質問に答えるだけで、下書きを作成します。")
+st.write("")
+
+# --- 📝 入力フォーム ---
+st.markdown('<span class="step-label"><span class="step-number">①</span>担当スタッフ</span>', unsafe_allow_html=True)
+csv_store_key = selected_store_name.replace("メンズサロン ", "")
+current_staff_list = staff_data_dict.get(csv_store_key, [])
+if not current_staff_list:
+    current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
+staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
+
+st.write("")
+st.markdown('<span class="step-label"><span class="step-number">②</span>本日のメニュー（複数可）</span>', unsafe_allow_html=True)
+menu = st.pills("メニュー", ["メンズカット", "フェードカット", "波巻きパーマ", "ツイストスパイラル", "ニュアンスパーマ", "カラー", "ブリーチ", "眉毛カット", "ヘッドスパ"], selection_mode="multi", label_visibility="collapsed")
+
+st.write("")
+st.markdown('<span class="step-label"><span class="step-number">③</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
+motivations = st.pills("きっかけ", MOTIVATION_LIST, selection_mode="multi", label_visibility="collapsed")
+
+st.write("")
+st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客（感想）</span>', unsafe_allow_html=True)
+atmospheres = st.pills("雰囲気", ATMOSPHERE_LIST, selection_mode="multi", label_visibility="collapsed")
+
+st.write("")
+st.markdown('<span class="step-label"><span class="step-number">⑤</span>その他の詳細・一言メモ（任意）</span>', unsafe_allow_html=True)
+free_text = st.text_input("その他の詳細", placeholder="例：デート前、自分へのご褒美、近所だったから、など", label_visibility="collapsed")
+
+st.write("")
+submit_button = st.button("口コミを生成する ✨")
+
+# --- 🤖 生成ロジック ---
+if submit_button:
+    if not menu and not motivations and not atmospheres and not free_text:
+        st.warning("項目をいくつか選択するか、一言メモを入力してください")
+    else:
+        menu_text = ", ".join(menu) if menu else "カット"
+        clean_motivations = [m for m in motivations if m != "その他"] if motivations else []
+        motivation_text = ", ".join(clean_motivations)
+        clean_atmospheres = [a for a in atmospheres if a != "その他"] if atmospheres else []
+        atmosphere_text = ", ".join(clean_atmospheres) if clean_atmospheres else "良かった"
+
+        system_instruction = f"""
+        あなたは「{selected_store_name}」に通う、トレンドに敏感な男性客です。
+        入力情報を元に、Googleマップ用の自然な口コミを150文字以内で作成してください。
+        【重要ルール】
+        1. 「〜に行きました」は禁止。「{area_keyword}」のエリア名を文脈に自然に混ぜる。
+        2. 店名を連呼せず「このお店」など自然な指示語を使う。
+        3. 「担当：{staff_name}」「メニュー：{menu_text}」を含める。
+        4. 動機「{motivation_text}」がどう解決したか書く。
+        5. 雰囲気「{atmosphere_text}」を反映。
+        6. メモ「{free_text}」があれば最優先する。
+        """
+        user_content = f"動機: {motivation_text}\n雰囲気: {atmosphere_text}\nメモ: {free_text}"
+
+        try:
+            with st.spinner("AIが文章を考えています..."):
+                client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}],
+                    temperature=0.7,
+                )
+                review_text = response.choices[0].message.content
+
+            st.success("✅ 作成完了！以下のテキストをコピーしてください")
+            st.text_area("生成された口コミ", review_text, height=200, label_visibility="collapsed")
+            st.markdown(f"""<a href="{selected_store_link}" target="_blank"><button style="width: 100%; background-color: #4285F4; color: white; padding: 14px; border: none; border-radius: 30px; font-weight: bold; margin-top: 10px; font-size: 18px; cursor: pointer;">Googleマップを開いて投稿する 🌍</button></a>""", unsafe_allow_html=True)
+
+        except Exception as e:
+            st.error("エラーが発生しました。APIキーを確認してください。")
