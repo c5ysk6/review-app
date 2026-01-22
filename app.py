@@ -4,6 +4,7 @@ import pandas as pd
 
 # --- ⚙️ 設定エリア ---
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
+
 # 店舗リスト
 STORES = {
     "メンズサロン EIGHT MEN 渋谷店": "https://g.page/r/CdXIDXyii4lgEAE/review",
@@ -32,8 +33,8 @@ STORE_AREAS = {
 
 # リスト定義
 MOTIVATION_LIST = [
-    "剛毛・広がり・癖を抑えたい", "絶壁・骨格をカバーしたい", "セットを楽に・時短したい",
-    "ビジネス・就活で使いたい", "ガラッとイメチェンしたい", "自分に似合う髪型を知りたい", "その他"
+    "長さを切りたい" "広がり・癖を抑えたい", "絶壁・骨格をカバーしたい", "セットを楽に・時短したい",
+    "仕事・就活のため", "イメチェンしたい", "似合う髪型を知りたい", "その他"
 ]
 ATMOSPHERE_LIST = [
     "丁寧なカウンセリング", "会話が楽しく盛り上がった", "静かにリラックスできた",
@@ -81,13 +82,6 @@ def load_staff_data():
 
 staff_data_dict = load_staff_data()
 
-# --- 🖼️ ロゴ表示（全幅表示） ---
-try:
-    # use_container_width=True で画面幅いっぱいに表示
-    st.image("B.jpg", use_container_width=True)
-except:
-    st.markdown("<h1 style='text-align: center;'>EIGHT MEN</h1>", unsafe_allow_html=True)
-
 # --- 📍 店舗選択 ---
 query_params = st.query_params
 url_store_param = query_params.get("store")
@@ -106,7 +100,7 @@ else:
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
 
 # 店舗名の表示
-st.markdown(f"<h3 style='margin-top: 10px; text-align: center;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='margin-top: 20px; text-align: center;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
