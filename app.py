@@ -18,7 +18,7 @@ STORES = {
     "那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
 }
 
-# 【SEO/MEO用】店舗名に紐づく「狙いたい地名・駅名」
+# 店舗名に紐づく「MEOエリア・駅名」
 STORE_AREAS = {
     "渋谷店": "渋谷",
     "池袋西口店": "池袋",
@@ -28,10 +28,10 @@ STORE_AREAS = {
     "北千住店": "北千住",
     "吉祥寺店": "吉祥寺",
     "博多店": "博多",
-    "那覇新都心店": "那覇",
+    "那覇新都心店": "那覇新都心・おもろまち",
 }
 
-# 【SEO対策】来店動機リスト（絵文字なし・ポジティブネガティブ混合）
+# ②来店動機リスト（最後に「その他」を判定用に追加）
 MOTIVATION_LIST = [
     "剛毛・広がり・癖を抑えたい",
     "絶壁・骨格をカバーしたい",
@@ -39,7 +39,17 @@ MOTIVATION_LIST = [
     "ビジネス・就活で使いたい",
     "ガラッとイメチェンしたい",
     "自分に似合う髪型を知りたい",
-    "リラックスして過ごしたい"
+    "その他"
+]
+
+# ③雰囲気・接客リスト（【NEW】新しい項目）
+ATMOSPHERE_LIST = [
+    "丁寧なカウンセリング",
+    "会話が楽しく盛り上がった",
+    "静かにリラックスできた",
+    "テキパキして早かった",
+    "プロの技術・アドバイス",
+    "店内がお洒落で清潔"
 ]
 
 # --- 🎨 ページ設定 & デザイン ---
@@ -47,6 +57,7 @@ st.set_page_config(page_title="EIGHT MEN 口コミ", layout="centered")
 
 st.markdown("""
     <style>
+    /* ボタンデザイン */
     .stButton>button {
         width: 100%; 
         border-radius: 30px; 
@@ -63,6 +74,7 @@ st.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 6px 15px rgba(211, 47, 47, 0.5);
     }
+    /* 見出しデザイン */
     h1 {
         color: #333;
         font-family: sans-serif;
@@ -71,6 +83,13 @@ st.markdown("""
         display: inline-block;
         padding-bottom: 10px;
         margin-bottom: 20px;
+    }
+    /* 項目番号の色 */
+    .step-number {
+        color: #D32F2F;
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-right: 5px;
     }
     .stCaption {
         font-size: 14px;
@@ -99,7 +118,6 @@ pre_selected_store = query_params.get("store", None)
 if pre_selected_store and pre_selected_store in STORES:
     selected_store_name = pre_selected_store
     selected_store_link = STORES[pre_selected_store]
-    # MEOエリアを取得
     area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
     st.markdown(f"<h3 style='color: #D32F2F;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 else:
@@ -122,7 +140,7 @@ staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibi
 st.write("") 
 
 # 2. メニュー選択
-st.caption("① 本日のメニュー（複数選択可）")
+st.markdown('<span class="step-number">①</span>本日のメニュー（複数可）', unsafe_allow_html=True)
 menu = st.pills(
     "メニュー",
     ["メンズカット", "フェードカット", "波巻きパーマ", "ツイストスパイラル", "ニュアンスパーマ", "カラー", "ブリーチ", "眉毛カット", "ヘッドスパ"],
@@ -132,8 +150,8 @@ menu = st.pills(
 
 st.write("")
 
-# 3. 動機・きっかけ（ハイブリッド入力の核）
-st.caption("② ご来店・オーダーのきっかけ（複数選択可）")
+# 3. 動機・きっかけ（その他＋自由記述の連動）
+st.markdown('<span class="step-number">②</span>お悩み・来店動機（複数可）', unsafe_allow_html=True)
 motivations = st.pills(
     "きっかけ",
     MOTIVATION_LIST,
@@ -141,13 +159,23 @@ motivations = st.pills(
     label_visibility="collapsed"
 )
 
+# 「その他」が選ばれた時だけ入力欄を表示するロジック
+free_text = ""
+if motivations and "その他" in motivations:
+    free_text = st.text_input(
+        "その他の詳細",
+        placeholder="例：デート前、自分へのご褒美、など",
+        label_visibility="collapsed"
+    )
+
 st.write("")
 
-# 4. 自由記述（ここが最強のSEO）
-st.caption("③ その他・一言メモ（任意）")
-free_text = st.text_input(
-    "label_hidden",
-    placeholder="例：彼女とのデート前なので気合いを入れたい、など",
+# 4. 雰囲気・接客（新項目）
+st.markdown('<span class="step-number">③</span>店内の雰囲気・接客（感想）', unsafe_allow_html=True)
+atmospheres = st.pills(
+    "雰囲気",
+    ATMOSPHERE_LIST,
+    selection_mode="multi",
     label_visibility="collapsed"
 )
 
@@ -157,14 +185,20 @@ submit_button = st.button("口コミを生成する ✨")
 
 # --- 🤖 生成ロジック ---
 if submit_button:
-    if not menu and not motivations and not free_text:
-        st.warning("メニューまたはきっかけを選択してください")
+    # 必須チェック（メニューか動機のどちらかは欲しい）
+    if not menu and not motivations and not atmospheres:
+        st.warning("項目をいくつか選択してください")
     else:
         # データの整形
         menu_text = ", ".join(menu) if menu else "カット"
-        motivation_text = ", ".join(motivations)
         
-        # システムプロンプト（AIへの役割指示）
+        # 動機リストから「その他」という文字自体は除外して、自由記述を結合
+        clean_motivations = [m for m in motivations if m != "その他"] if motivations else []
+        motivation_text = ", ".join(clean_motivations)
+        
+        atmosphere_text = ", ".join(atmospheres) if atmospheres else "良かった"
+
+        # システムプロンプト
         system_instruction = f"""
         あなたは「メンズサロン EIGHT MEN {selected_store_name}」に通う男性客です。
         入力情報を元に、Googleマップ用の自然な口コミを150文字以内で作成してください。
@@ -173,19 +207,20 @@ if submit_button:
         1. エリア名「{area_keyword}」を自然に文中に含めること（MEO対策）。
         2. 「SEO」等の専門用語は使わず、少し話し言葉を混ぜてリアルにする。
         3. 「担当：{staff_name}」と「メニュー：{menu_text}」を含める。
-        4. お客様の入力した「きっかけ（{motivation_text}）」や「メモ（{free_text}）」に対し、それがどう解決したか（ベネフィット）を書く。
-        5. もし「メモ（{free_text}）」がある場合は、その内容を最優先で文章の核にする。
+        4. お客様の「お悩み・動機（{motivation_text}）」に対し、どう解決したか（ベネフィット）を書く。
+        5. 「雰囲気・感想（{atmosphere_text}）」の内容を反映させる。
+        6. もし「その他の自由記述（{free_text}）」がある場合は、その内容を最優先して文章の核にする。
         """
 
-        # ユーザープロンプト（変数渡し）
-        user_content = f"動機: {motivation_text}\n自由メモ: {free_text}"
+        # ユーザープロンプト
+        user_content = f"動機: {motivation_text}\n自由記述: {free_text}\n雰囲気: {atmosphere_text}"
 
         try:
             with st.spinner("AIが文章を考えています..."):
                 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
                 
                 response = client.chat.completions.create(
-                    model="gpt-4", # または gpt-3.5-turbo
+                    model="gpt-4",
                     messages=[
                         {"role": "system", "content": system_instruction},
                         {"role": "user", "content": user_content}
@@ -197,8 +232,6 @@ if submit_button:
 
             # --- 結果表示 ---
             st.success("作成完了！下のテキストをコピーしてください。")
-            
-            # コピーしやすいようにコードブロックまたはテキストエリアで表示
             st.text_area("↓↓ タップしてすべて選択・コピー ↓↓", review_text, height=150)
             
             # Googleマップへ誘導
