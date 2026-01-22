@@ -4,15 +4,15 @@ from openai import OpenAI
 # --- 🏢 店舗データ設定エリア（ここを書き換えてください！） ---
 # 形式: "店舗名": "その店のGoogleクチコミリンク"
 STORES = {
-    "渋谷店": "https://maps.app.goo.gl/ammwDLmZGDwsxAvN7?g_st=ic",
-    "池袋西口店": "https://maps.app.goo.gl/pMjQqi2Nu1VvNWCD7?g_st=ic",
-    "池袋東口店": "https://maps.app.goo.gl/ez37iF8RTQ5ph1cP8?g_st=ic",
-    "新宿店": "https://maps.app.goo.gl/5pB1hG6ri1KzpxZo9?g_st=ic",
-    "上野店": "https://maps.app.goo.gl/oc4w4ugjShPpL1UN8?g_st=ic",
-    "北千住店": "https://maps.app.goo.gl/ZE1cdmxZk9W1dCFc9?g_st=ic",
-    "吉祥寺店": "https://maps.app.goo.gl/C9nVYFn5JyyQLh7H9?g_st=ic",
-    "博多店": "https://maps.app.goo.gl/Byq6bavcGh1zn5fQ9?g_st=ic",
-    "那覇新都心店": "https://maps.app.goo.gl/JzmjMrp5vEEhLPeW7?g_st=ic",
+    "渋谷店": "https://g.page/r/CdXIDXyii4lgEAE/review",
+    "池袋西口店": "https://g.page/r/CaV4ekjwYsV1EAE/review",
+    "池袋東口店": "https://g.page/r/CdTMjlluc_OFEAE/review",
+    "新宿店": "https://g.page/r/CYky-2vp6Y0REAE/review",
+    "上野店": "https://g.page/r/CQh9ZNzN-HMPEAE/review",
+    "北千住店": "https://g.page/r/CVCsbonX5vKQEAE/review",
+    "吉祥寺店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
+    "博多店": "https://g.page/r/Cfs_-7LhTWtDEAE/review",
+    "那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
     # ... ここに9店舗分ずらっと並べる
 }
 
