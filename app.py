@@ -41,11 +41,18 @@ MOTIVATION_LIST = [
     "ガラッとイメチェンしたい",
     "自分に似合う髪型を知りたい",
     "その他"
+]
 
-    
+# 修正箇所：全角スペースや全角クォーテーションを削除・修正しました
 ATMOSPHERE_LIST = [
-    "丁寧なカウンセリング", "会話が楽しく盛り上がった", "静かにリラックスできた",
-    "テキパキして早かった", "プロの技術・アドバイス", "店内がお洒落", "その他"
+    "会話が楽しく盛り上がった",
+    "静かにリラックスできた",
+    "丁寧なカウンセリング",
+    "テキパキして早かった",
+    "プロの技術・アドバイス",
+    "店内がお洒落",
+    "要望を汲み取ってくれた",
+    "その他"
 ]
 
 # --- 🎨 ページ設定 & デザイン ---
@@ -76,11 +83,11 @@ st.markdown("""
     .step-number { color: #D32F2F; font-weight: 900; margin-right: 6px; }
     h3 { color: #D32F2F !important; margin-bottom: 0px !important; }
     
-    /* 入力フィールドの調整（フォントサイズを小さく） */
+    /* 入力フィールドの調整 */
     .stTextInput > div > div > input {
         border-radius: 10px;
         padding: 10px;
-        font-size: 12px; 
+        font-size: 12px; /* 文字サイズを小さく統一 */
     }
     </style>
     """, unsafe_allow_html=True)
@@ -178,7 +185,7 @@ if motivations and "その他" in motivations:
 
 st.write("")
 # ④ 雰囲気
-st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客（感想）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客の良かったところ（感想）</span>', unsafe_allow_html=True)
 atmospheres = st.pills("雰囲気", ATMOSPHERE_LIST, selection_mode="multi", label_visibility="collapsed")
 
 # 【条件分岐】「その他」が選択されている場合のみ入力欄を表示
