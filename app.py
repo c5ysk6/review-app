@@ -5,30 +5,30 @@ import pandas as pd
 # --- ⚙️ 設定エリア ---
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
 
-# 店舗リスト
+# 店舗リスト（名前を「EIGHT MEN 〇〇店」に統一）
 STORES = {
-    "メンズサロン EIGHT MEN 渋谷店": "https://g.page/r/CdXIDXyii4lgEAE/review",
-    "メンズサロン EIGHT MEN 池袋西口店": "https://g.page/r/CaV4ekjwYsV1EAE/review",
-    "メンズサロン EIGHT MEN 池袋東口店": "https://g.page/r/CdTMjlluc_OFEAE/review",
-    "メンズサロン EIGHT MEN 新宿店": "https://g.page/r/CYky-2vp6Y0REAE/review",
-    "メンズサロン EIGHT MEN 上野店": "https://g.page/r/CQh9ZNzN-HMPEAE/review",
-    "メンズサロン EIGHT MEN 北千住店": "https://g.page/r/CVCsbonX5vKQEAE/review",
-    "メンズサロン EIGHT MEN 吉祥寺店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
-    "メンズサロン EIGHT MEN 博多店": "https://g.page/r/Cfs_-7LhTWtDEAE/review",
-    "メンズサロン EIGHT MEN 那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
+    "EIGHT MEN 渋谷店": "https://g.page/r/CdXIDXyii4lgEAE/review",
+    "EIGHT MEN 池袋西口店": "https://g.page/r/CaV4ekjwYsV1EAE/review",
+    "EIGHT MEN 池袋東口店": "https://g.page/r/CdTMjlluc_OFEAE/review",
+    "EIGHT MEN 新宿店": "https://g.page/r/CYky-2vp6Y0REAE/review",
+    "EIGHT MEN 上野店": "https://g.page/r/CQh9ZNzN-HMPEAE/review",
+    "EIGHT MEN 北千住店": "https://g.page/r/CVCsbonX5vKQEAE/review",
+    "EIGHT MEN 吉祥寺店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
+    "EIGHT MEN 博多店": "https://g.page/r/Cfs_-7LhTWtDEAE/review",
+    "EIGHT MEN 那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
 }
 
 # エリア名辞書
 STORE_AREAS = {
-    "メンズサロン EIGHT MEN 渋谷店": "渋谷",
-    "メンズサロン EIGHT MEN 池袋西口店": "池袋",
-    "メンズサロン EIGHT MEN 池袋東口店": "池袋",
-    "メンズサロン EIGHT MEN 新宿店": "新宿",
-    "メンズサロン EIGHT MEN 上野店": "上野",
-    "メンズサロン EIGHT MEN 北千住店": "北千住",
-    "メンズサロン EIGHT MEN 吉祥寺店": "吉祥寺",
-    "メンズサロン EIGHT MEN 博多店": "博多",
-    "メンズサロン EIGHT MEN 那覇新都心店": "那覇新都心・おもろまち",
+    "EIGHT MEN 渋谷店": "渋谷",
+    "EIGHT MEN 池袋西口店": "池袋",
+    "EIGHT MEN 池袋東口店": "池袋",
+    "EIGHT MEN 新宿店": "新宿",
+    "EIGHT MEN 上野店": "上野",
+    "EIGHT MEN 北千住店": "北千住",
+    "EIGHT MEN 吉祥寺店": "吉祥寺",
+    "EIGHT MEN 博多店": "博多",
+    "EIGHT MEN 那覇新都心店": "那覇新都心・おもろまち",
 }
 
 # リスト定義
@@ -102,9 +102,8 @@ else:
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
-# --- 🖼️ 店舗名表示（元に戻しました） ---
-# white-space: nowrap で「絶対に改行させない」設定にしています
-# スマホで長すぎる場合は少し文字が小さくなるように調整しています
+# --- 🖼️ 店舗名表示 ---
+# 改行させない設定 (white-space: nowrap)
 st.markdown(f"""
 <h3 style='
     margin-top: 20px; 
@@ -135,10 +134,16 @@ st.write("")
 
 # --- 📝 入力フォーム ---
 st.markdown('<span class="step-label"><span class="step-number">①</span>担当スタッフ</span>', unsafe_allow_html=True)
-csv_store_key = selected_store_name.replace("メンズサロン ", "")
+
+# CSVの店舗名と一致させるための処理
+# 「EIGHT MEN 〇〇店」から「〇〇店」の部分だけを抜き出してマッチング
+csv_store_key = selected_store_name.replace("EIGHT MEN ", "")
 current_staff_list = staff_data_dict.get(csv_store_key, [])
+
 if not current_staff_list:
+    # 万が一見つからない場合はリストのまま探す（念のため）
     current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
+
 staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
 
 st.write("")
