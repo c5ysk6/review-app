@@ -127,18 +127,24 @@ def load_staff_data():
 staff_data_dict = load_staff_data()
 
 # --- 📍 店舗自動判定 ---
+# URLパラメータ（?store=...）を取得
 query_params = st.query_params
-pre_selected_store = query_params.get("store", None)
+# get()で値を取得（存在しない場合は None になる）
+pre_selected_store = query_params.get("store")
 
-# URLパラメータなどで店舗が指定されていない場合の処理
+# URLで店舗が指定されており、かつその店舗がリストに存在する場合
 if pre_selected_store and pre_selected_store in STORES:
     selected_store_name = pre_selected_store
+    # ★ここがポイント：プルダウンを表示せず、変数に値をセットするだけにする
 else:
-    # デフォルトの選択ボックス
+    # URL指定がない場合は、通常通りプルダウンを表示して選ばせる
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
+
+# 店舗名の表示（どちらの場合でも表示される）
+st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 # 店舗名の表示
 st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
