@@ -33,12 +33,18 @@ STORE_AREAS = {
 
 # リスト定義
 MOTIVATION_LIST = [
-    "剛毛・広がり・癖を抑えたい", "絶壁・骨格をカバーしたい", "セットを楽に・時短したい",
-    "ビジネス・就活で使いたい", "ガラッとイメチェンしたい", "自分に似合う髪型を知りたい", "その他"
+    "伸びたから短くしたい",
+    "広がり・癖を抑えたい",
+    "絶壁・骨格をカバーしたい",
+    "セットを楽に・時短したい",
+    "仕事・就活で使いたい",
+    "ガラッとイメチェンしたい",
+    "自分に似合う髪型を知りたい",
+    "その他"
 ]
 ATMOSPHERE_LIST = [
     "丁寧なカウンセリング", "会話が楽しく盛り上がった", "静かにリラックスできた",
-    "テキパキして早かった", "プロの技術・アドバイス", "店内がお洒落で清潔", "その他"
+    "テキパキして早かった", "プロの技術・アドバイス", "店内がお洒落", "その他"
 ]
 
 # --- 🎨 ページ設定 & デザイン ---
@@ -68,6 +74,12 @@ st.markdown("""
     .step-label { color: #333; font-weight: bold; font-size: 16px; margin-bottom: 8px; display: block; }
     .step-number { color: #D32F2F; font-weight: 900; margin-right: 6px; }
     h3 { color: #D32F2F !important; margin-bottom: 0px !important; }
+    
+    /* 入力フィールドの調整 */
+    .stTextInput > div > div > input {
+        border-radius: 10px;
+        padding: 10px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -102,7 +114,6 @@ selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
 # --- 🖼️ 店舗名表示 ---
-# 文字サイズを大きく(28px)、太字にし、幅いっぱいに強調
 st.markdown(f"""
 <h3 style='
     margin-top: 10px; 
@@ -137,7 +148,6 @@ st.write("")
 # --- 📝 入力フォーム ---
 st.markdown('<span class="step-label"><span class="step-number">①</span>担当スタッフ</span>', unsafe_allow_html=True)
 
-# 店舗名マッチング（EIGHT MEN 〇〇店 -> 〇〇店）
 csv_store_key = selected_store_name.replace("EIGHT MEN ", "")
 current_staff_list = staff_data_dict.get(csv_store_key, [])
 
@@ -153,28 +163,50 @@ menu = st.pills("メニュー", ["メンズカット", "フェードカット", 
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">③</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
 motivations = st.pills("きっかけ", MOTIVATION_LIST, selection_mode="multi", label_visibility="collapsed")
+# 【追加】動機用の自由記述
+motivation_detail = st.text_input(
+    "お悩み・動機の詳細（その他）", 
+    placeholder="その他：具体的なお悩みや、こうなりたい！という希望など", 
+    label_visibility="collapsed"
+)
 
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客（感想）</span>', unsafe_allow_html=True)
 atmospheres = st.pills("雰囲気", ATMOSPHERE_LIST, selection_mode="multi", label_visibility="collapsed")
+# 【追加】雰囲気用の自由記述
+atmosphere_detail = st.text_input(
+    "雰囲気・接客の詳細（その他）", 
+    placeholder="その他：スタッフの対応や店内の様子など", 
+    label_visibility="collapsed"
+)
 
-st.write("")
-st.markdown('<span class="step-label"><span class="step-number">⑤</span>その他の詳細・一言メモ（任意）</span>', unsafe_allow_html=True)
-free_text = st.text_input("その他の詳細", placeholder="例：デート前、自分へのご褒美、近所だったから、など", label_visibility="collapsed")
+# ⑤の自由記述は削除しました
 
 st.write("")
 submit_button = st.button("口コミを生成する ✨")
 
 # --- 🤖 生成ロジック ---
 if submit_button:
-    if not menu and not motivations and not atmospheres and not free_text:
-        st.warning("項目をいくつか選択するか、一言メモを入力してください")
+    # 必須チェック（メニューか動機か雰囲気が選ばれていればOK）
+    if not menu and not motivations and not atmospheres and not motivation_detail and not atmosphere_detail:
+        st.warning("項目をいくつか選択してください")
     else:
+        # データ整形
         menu_text = ", ".join(menu) if menu else "カット"
+        
+        # 動機の処理（選択肢 + 自由記述）
         clean_motivations = [m for m in motivations if m != "その他"] if motivations else []
-        motivation_text = ", ".join(clean_motivations)
+        motivation_text_parts = clean_motivations.copy()
+        if motivation_detail:
+            motivation_text_parts.append(motivation_detail)
+        motivation_final_text = "、".join(motivation_text_parts) if motivation_text_parts else "特になし"
+
+        # 雰囲気の処理（選択肢 + 自由記述）
         clean_atmospheres = [a for a in atmospheres if a != "その他"] if atmospheres else []
-        atmosphere_text = ", ".join(clean_atmospheres) if clean_atmospheres else "良かった"
+        atmosphere_text_parts = clean_atmospheres.copy()
+        if atmosphere_detail:
+            atmosphere_text_parts.append(atmosphere_detail)
+        atmosphere_final_text = "、".join(atmosphere_text_parts) if atmosphere_text_parts else "良かった"
 
         system_instruction = f"""
         あなたは「{selected_store_name}」に通う、トレンドに敏感な男性客です。
@@ -183,11 +215,10 @@ if submit_button:
         1. 「〜に行きました」は禁止。「{area_keyword}」のエリア名を文脈に自然に混ぜる。
         2. 店名を連呼せず「このお店」など自然な指示語を使う。
         3. 「担当：{staff_name}」「メニュー：{menu_text}」を含める。
-        4. 動機「{motivation_text}」がどう解決したか書く。
-        5. 雰囲気「{atmosphere_text}」を反映。
-        6. メモ「{free_text}」があれば最優先する。
+        4. 来店動機・悩み「{motivation_final_text}」について、どう解決したか（ベネフィット）を書く。
+        5. 雰囲気・感想「{atmosphere_final_text}」を反映させる。
         """
-        user_content = f"動機: {motivation_text}\n雰囲気: {atmosphere_text}\nメモ: {free_text}"
+        user_content = f"動機・悩み: {motivation_final_text}\n雰囲気・感想: {atmosphere_final_text}"
 
         try:
             with st.spinner("AIが文章を考えています..."):
