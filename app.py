@@ -127,42 +127,38 @@ def load_staff_data():
 
 staff_data_dict = load_staff_data()
 
-# --- 📍 店舗自動判定 (改良版) ---
+# --- 🖼️ ロゴ表示 ---
+# 画像ファイル名 "IMG_7899.JPG" を指定しています
+# ※このPythonファイルと同じ場所に画像を置いてください
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    try:
+        st.image("IMG_7899.JPG", use_container_width=True)
+    except:
+        # 画像がない場合のエラー回避（文字で表示）
+        st.markdown("<h1 style='text-align: center; color: #333;'>EIGHT MEN</h1>", unsafe_allow_html=True)
+
+# --- 📍 店舗選択ロジック ---
 query_params = st.query_params
 url_store_param = query_params.get("store")
 
-# URLで指定された文字列を含む店舗名を探す（部分一致検索）
 found_store_name = None
 
+# URLパラメータがある場合、部分一致で店舗を探す
 if url_store_param:
     for store_key in STORES.keys():
         if url_store_param in store_key:
             found_store_name = store_key
             break
 
-# ★ここが変更点：店舗が見つかった場合は「ウェルカムカード」を表示して空白を埋める
 if found_store_name:
+    # URLで見つかった場合 → プルダウン非表示（変に埋めず、ただ隠す）
     selected_store_name = found_store_name
-    
-    # 選択ボックスの代わりに表示する「店舗看板」デザイン
-    st.markdown(f"""
-        <div style="
-            padding: 20px; 
-            border: 2px solid #ffebee; 
-            border-radius: 15px; 
-            background-color: #fffbfb;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            <p style="margin: 0 0 5px 0; color: #D32F2F; font-weight: bold; font-size: 12px; letter-spacing: 1px;">WELCOME TO</p>
-            <h3 style="margin: 0; color: #333; font-size: 18px;">📍 {selected_store_name}</h3>
-        </div>
-    """, unsafe_allow_html=True)
-
 else:
-    # 店舗指定がない場合は通常通り選択ボックスを表示
+    # URLにない場合 → プルダウン表示
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
-    st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
+
+st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
