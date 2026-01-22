@@ -82,14 +82,15 @@ def load_staff_data():
 
 staff_data_dict = load_staff_data()
 
-# --- 🖼️ ロゴ表示（左上に配置変更） ---
+# --- 🖼️ ロゴ表示（新しいロゴに変更） ---
 # [1, 3]の割合で分割し、左側の狭いエリアにロゴを置く
 col1, col2 = st.columns([1, 3])
 
 with col1:
     try:
+        # 新しい画像ファイル名に変更
         # width=100 でサイズを小さく固定し、左上にアイコン的に表示
-        st.image("IMG_7899.JPG", width=100)
+        st.image("eight_men_barber_logo.png", width=100)
     except:
         st.write("EIGHT MEN")
 
@@ -107,11 +108,10 @@ if url_store_param:
 if found_store_name:
     selected_store_name = found_store_name
 else:
-    # URLにない場合はcol2（ロゴの右側）ではなく、下の段で選択させる
-    # （スマホでのレイアウト崩れを防ぐため）
+    # URLにない場合は下の段で選択させる
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
 
-# 店舗名の表示（右側寄せではなく、標準配置で見やすく）
+# 店舗名の表示
 st.markdown(f"<h3 style='margin-top: 10px;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 selected_store_link = STORES[selected_store_name]
