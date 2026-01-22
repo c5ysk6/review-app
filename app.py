@@ -102,24 +102,20 @@ else:
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
-# --- 🖼️ 店舗名のバナー表示（ここを変更） ---
-# 画面幅いっぱいに広がる赤いバナーデザインに変更
+# --- 🖼️ 店舗名表示（元に戻しました） ---
+# white-space: nowrap で「絶対に改行させない」設定にしています
+# スマホで長すぎる場合は少し文字が小さくなるように調整しています
 st.markdown(f"""
-<div style="
-    width: 100%;
-    background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
+<h3 style='
+    margin-top: 20px; 
+    text-align: center; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
     font-size: 18px;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-">
+'>
     📍 {selected_store_name}
-</div>
+</h3>
 """, unsafe_allow_html=True)
 
 
