@@ -127,15 +127,15 @@ def load_staff_data():
 
 staff_data_dict = load_staff_data()
 
-# --- 🖼️ ロゴ表示 ---
-# 画像ファイル名 "IMG_7899.JPG" を指定しています
-# ※このPythonファイルと同じ場所に画像を置いてください
+# --- 🖼️ ロゴ表示（ここを追加修正しました） ---
+# カラムを使って中央寄せにします
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     try:
+        # GitHubにアップロードされた画像ファイル名と一致させる
         st.image("IMG_7899.JPG", use_container_width=True)
     except:
-        # 画像がない場合のエラー回避（文字で表示）
+        # 画像読み込みエラー時はテキストで代用
         st.markdown("<h1 style='text-align: center; color: #333;'>EIGHT MEN</h1>", unsafe_allow_html=True)
 
 # --- 📍 店舗選択ロジック ---
@@ -152,13 +152,13 @@ if url_store_param:
             break
 
 if found_store_name:
-    # URLで見つかった場合 → プルダウン非表示（変に埋めず、ただ隠す）
+    # URLで見つかった場合 → プルダウン非表示
     selected_store_name = found_store_name
 else:
     # URLにない場合 → プルダウン表示
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
 
-st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='text-align: center;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
@@ -263,7 +263,7 @@ if submit_button:
                 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
                 
                 response = client.chat.completions.create(
-                    model="gpt-4",
+                    model="gpt-4o-mini", # コストと速度のバランスが良いモデルを指定
                     messages=[
                         {"role": "system", "content": system_instruction},
                         {"role": "user", "content": user_content}
