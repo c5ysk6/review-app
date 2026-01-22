@@ -13,7 +13,7 @@ STORES = {
     "吉祥寺店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
     "博多店": "https://g.page/r/Cfs_-7LhTWtDEAE/review",
     "那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
-    # ... ここに9店舗分ずらっと並べる
+    # ... ここにずらっと並べる
 }
 
 # --- ページ設定 ---
