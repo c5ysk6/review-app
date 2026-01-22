@@ -35,10 +35,10 @@ STORE_AREAS = {
 MOTIVATION_LIST = [
     "伸びたから短くしたい",
     "広がり・癖を抑えたい",
-    "骨格をカバーしたい",
+    "絶壁・骨格をカバーしたい",
     "セットを楽に・時短したい",
     "仕事・就活で使いたい",
-    "イメチェンしたい",
+    "ガラッとイメチェンしたい",
     "自分に似合う髪型を知りたい",
     "その他"
 ]
@@ -161,26 +161,32 @@ st.markdown('<span class="step-label"><span class="step-number">②</span>本日
 menu = st.pills("メニュー", ["メンズカット", "フェードカット", "波巻きパーマ", "ツイストスパイラル", "ニュアンスパーマ", "カラー", "ブリーチ", "眉毛カット", "ヘッドスパ"], selection_mode="multi", label_visibility="collapsed")
 
 st.write("")
+# ③ お悩み・動機
 st.markdown('<span class="step-label"><span class="step-number">③</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
 motivations = st.pills("きっかけ", MOTIVATION_LIST, selection_mode="multi", label_visibility="collapsed")
-# 【追加】動機用の自由記述
-motivation_detail = st.text_input(
-    "お悩み・動機の詳細（その他）", 
-    placeholder="その他：具体的なお悩みや、こうなりたい！という希望など", 
-    label_visibility="collapsed"
-)
+
+# 【条件分岐】「その他」が選択されている場合のみ入力欄を表示
+motivation_detail = ""
+if motivations and "その他" in motivations:
+    motivation_detail = st.text_input(
+        "お悩み・動機の詳細（その他）", 
+        placeholder="その他：具体的なお悩みや、こうなりたい！という希望など", 
+        label_visibility="collapsed"
+    )
 
 st.write("")
+# ④ 雰囲気
 st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客（感想）</span>', unsafe_allow_html=True)
 atmospheres = st.pills("雰囲気", ATMOSPHERE_LIST, selection_mode="multi", label_visibility="collapsed")
-# 【追加】雰囲気用の自由記述
-atmosphere_detail = st.text_input(
-    "雰囲気・接客の詳細（その他）", 
-    placeholder="その他：スタッフの対応や店内の様子など", 
-    label_visibility="collapsed"
-)
 
-# ⑤の自由記述は削除しました
+# 【条件分岐】「その他」が選択されている場合のみ入力欄を表示
+atmosphere_detail = ""
+if atmospheres and "その他" in atmospheres:
+    atmosphere_detail = st.text_input(
+        "雰囲気・接客の詳細（その他）", 
+        placeholder="その他：スタッフの対応や店内の様子など", 
+        label_visibility="collapsed"
+    )
 
 st.write("")
 submit_button = st.button("口コミを生成する ✨")
