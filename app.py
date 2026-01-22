@@ -5,7 +5,7 @@ import pandas as pd
 # --- ⚙️ 設定エリア ---
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
 
-# 店舗リスト（名前を「EIGHT MEN 〇〇店」に統一）
+# 店舗リスト（EIGHT MEN 〇〇店 に統一）
 STORES = {
     "EIGHT MEN 渋谷店": "https://g.page/r/CdXIDXyii4lgEAE/review",
     "EIGHT MEN 池袋西口店": "https://g.page/r/CaV4ekjwYsV1EAE/review",
@@ -68,6 +68,9 @@ st.markdown("""
     .step-label { color: #333; font-weight: bold; font-size: 16px; margin-bottom: 8px; display: block; }
     .step-number { color: #D32F2F; font-weight: 900; margin-right: 6px; }
     h3 { color: #D32F2F !important; margin-bottom: 0px !important; }
+    
+    /* 画像の余白を消して幅いっぱいにする調整 */
+    .stImage { margin-top: -20px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -81,6 +84,13 @@ def load_staff_data():
         return {}
 
 staff_data_dict = load_staff_data()
+
+# --- 🖼️ ヘッダー画像（幅いっぱい） ---
+try:
+    # use_container_width=True でスマホ画面の横幅いっぱいに表示
+    st.image("B.jpg", use_container_width=True)
+except:
+    st.markdown("<h1 style='text-align: center;'>EIGHT MEN</h1>", unsafe_allow_html=True)
 
 # --- 📍 店舗選択 ---
 query_params = st.query_params
@@ -96,17 +106,15 @@ if url_store_param:
 if found_store_name:
     selected_store_name = found_store_name
 else:
-    # URLにない場合は選択させる
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
 # --- 🖼️ 店舗名表示 ---
-# 改行させない設定 (white-space: nowrap)
 st.markdown(f"""
 <h3 style='
-    margin-top: 20px; 
+    margin-top: 10px; 
     text-align: center; 
     white-space: nowrap; 
     overflow: hidden; 
@@ -135,13 +143,11 @@ st.write("")
 # --- 📝 入力フォーム ---
 st.markdown('<span class="step-label"><span class="step-number">①</span>担当スタッフ</span>', unsafe_allow_html=True)
 
-# CSVの店舗名と一致させるための処理
-# 「EIGHT MEN 〇〇店」から「〇〇店」の部分だけを抜き出してマッチング
+# 店舗名マッチング（EIGHT MEN 〇〇店 -> 〇〇店）
 csv_store_key = selected_store_name.replace("EIGHT MEN ", "")
 current_staff_list = staff_data_dict.get(csv_store_key, [])
 
 if not current_staff_list:
-    # 万が一見つからない場合はリストのまま探す（念のため）
     current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
 
 staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
