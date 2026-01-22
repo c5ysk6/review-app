@@ -102,6 +102,7 @@ selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
 # --- 🖼️ 店舗名表示 ---
+# 文字サイズを大きく(28px)、太字にし、幅いっぱいに強調
 st.markdown(f"""
 <h3 style='
     margin-top: 10px; 
@@ -109,7 +110,10 @@ st.markdown(f"""
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis;
-    font-size: 18px;
+    font-size: 28px;
+    font-weight: 800;
+    width: 100%;
+    color: #333;
 '>
     📍 {selected_store_name}
 </h3>
