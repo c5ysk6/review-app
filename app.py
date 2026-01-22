@@ -146,9 +146,6 @@ area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 # 店舗名の表示（どちらの場合でも表示される）
 st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
-# 店舗名の表示
-st.markdown(f"<h3>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
-
 # --- 📝 スタッフ選択 & 直行ボタン ---
 
 # スタッフデータのキー（CSV）と表示名（UI）のズレを吸収する処理
@@ -169,7 +166,6 @@ st.markdown(f"""
     Googleマップで自分で口コミを書く方はこちら 📝
 </a>
 """, unsafe_allow_html=True)
-
 st.divider()
 st.write("🤖 **AIにお任せする方はこちら**")
 st.write("簡単な質問に答えるだけで、下書きを作成します。")
