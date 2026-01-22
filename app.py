@@ -92,4 +92,3 @@ st.markdown("""
         text-decoration: none;
         font-weight: bold;
         font-size: 14px
-    
