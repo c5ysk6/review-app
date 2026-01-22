@@ -35,7 +35,7 @@ STORE_AREAS = {
 MOTIVATION_LIST = [
     "伸びたから短くしたい",
     "広がり・癖を抑えたい",
-    "絶壁・骨格をカバーしたい",
+    "骨格をカバーしたい",
     "セットを楽に・時短したい",
     "仕事・就活で使いたい",
     "ガラッとイメチェンしたい",
@@ -75,10 +75,11 @@ st.markdown("""
     .step-number { color: #D32F2F; font-weight: 900; margin-right: 6px; }
     h3 { color: #D32F2F !important; margin-bottom: 0px !important; }
     
-    /* 入力フィールドの調整 */
+    /* 入力フィールドの調整（ここを変更しました） */
     .stTextInput > div > div > input {
         border-radius: 10px;
         padding: 10px;
+        font-size: 12px; /* 文字サイズを小さく統一 */
     }
     </style>
     """, unsafe_allow_html=True)
@@ -158,7 +159,7 @@ staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibi
 
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">②</span>本日のメニュー（複数可）</span>', unsafe_allow_html=True)
-menu = st.pills("メニュー", ["メンズカット", "フェードカット", "波巻きパーマ", "ツイストスパイラル", "ニュアンスパーマ", "カラー", "ブリーチ", "眉毛カット", "ヘッドスパ"], selection_mode="multi", label_visibility="collapsed")
+menu = st.pills("メニュー", ["メンズカット", "カラー", "ブリーチ", "パーマ", "ストレートパーマ", "縮毛矯正", "眉毛カット", "ヘッドスパ"], selection_mode="multi", label_visibility="collapsed")
 
 st.write("")
 # ③ お悩み・動機
