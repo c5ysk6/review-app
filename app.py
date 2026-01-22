@@ -1,9 +1,10 @@
 import streamlit as st
 from openai import OpenAI
 import pandas as pd
+import time
 
 # --- ⚙️ 設定エリア ---
-# ★ここに【手順2】でコピーしたスプレッドシートのURLを貼ってください
+# ★ここにスプレッドシートのURLを貼ってください
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
 
 # 店舗ごとのGoogleマップリンク
@@ -19,28 +20,64 @@ STORES = {
     "那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
 }
 
-# --- 🎨 ページ設定 ---
+# --- 🎨 ページ設定 & シンプルデザイン ---
 st.set_page_config(page_title="EIGHT MEN 口コミ", layout="centered")
+
+# CSSでスタイリング（白ベース・赤アクセント）
 st.markdown("""
     <style>
-    .stButton>button {width: 100%; border-radius: 12px; font-weight: bold; padding: 12px; background-color: #D32F2F; color: white; border: none;}
+    /* ボタンのデザイン（EIGHT MENレッドのグラデーション） */
+    /* 白背景に映えるように調整 */
+    .stButton>button {
+        width: 100%; 
+        border-radius: 30px; 
+        font-weight: bold; 
+        padding: 16px; 
+        background: linear-gradient(135deg, #D32F2F 0%, #FF5252 100%); 
+        color: white; 
+        border: none;
+        box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+        transition: all 0.3s ease;
+        font-size: 18px;
+    }
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(211, 47, 47, 0.5);
+    }
+    /* ヘッダー隠し */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* タイトルを見やすく強調 */
+    h1 {
+        color: #333;
+        font-family: sans-serif;
+        font-weight: 800;
+        border-bottom: 3px solid #D32F2F;
+        display: inline-block;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    /* サブタイトルや説明文 */
+    .stCaption {
+        font-size: 16px;
+        color: #555;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 📥 スプレッドシート読み込みロジック ---
-@st.cache_data(ttl=600) # 10分ごとにデータを再取得（更新反映）
+# --- 📥 データ読み込み ---
+@st.cache_data(ttl=600)
 def load_staff_data():
     try:
         df = pd.read_csv(SHEET_URL)
-        # 店舗名をキー、スタッフリストを値にする辞書に変換
         return df.groupby('店舗名')['スタッフ名'].apply(list).to_dict()
     except Exception:
         return {}
 
-# データをロード
 staff_data_dict = load_staff_data()
 
 # --- 📍 店舗自動判定 ---
@@ -50,40 +87,57 @@ pre_selected_store = query_params.get("store", None)
 if pre_selected_store and pre_selected_store in STORES:
     selected_store_name = pre_selected_store
     selected_store_link = STORES[pre_selected_store]
-    st.subheader(f"📍 {selected_store_name}")
+    # 店舗名を赤文字で強調
+    st.markdown(f"<h3 style='color: #D32F2F;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 else:
     selected_store_name = st.selectbox("店舗を選択", list(STORES.keys()))
     selected_store_link = STORES[selected_store_name]
 
-st.title("本日の感想をお聞かせください")
-st.caption("AIがあなたの代わりに口コミ文章を作成します🤖")
+st.title("GUEST REVIEW")
+st.write("ご来店ありがとうございます。\n簡単な質問に答えるだけで、AIが口コミ文章を作成します。")
 
-# --- 📝 入力フォーム ---
-with st.form("review_form"):
-    
-    # スプレッドシートからその店のスタッフリストを取得
-    current_staff_list = staff_data_dict.get(selected_store_name, ["指名なし"])
-    
-    # 万が一シートにデータがない場合のエラー回避
-    if not current_staff_list:
-        current_staff_list = ["指名なし"]
+# --- 📝 見やすい入力フォーム ---
+st.divider() # 区切り線で見やすく
 
-    staff_name = st.selectbox("担当スタッフ", current_staff_list)
+# スタッフ選択
+st.caption("担当スタッフ")
+current_staff_list = staff_data_dict.get(selected_store_name, ["指名なし"])
+if not current_staff_list: current_staff_list = ["指名なし"]
+staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
 
-    menu = st.multiselect(
-        "施術メニュー",
-        ["カット", "パーマ", "カラー", "ブリーチ", "縮毛矯正", "眉毛カット", "スパ", "トリートメント"],
-        default=["カット"]
-    )
+st.write("") 
 
-    rating = st.slider("満足度", 1, 5, 5)
+# pills（カプセルボタン）
+st.caption("① 本日のメニュー（複数選択可）")
+menu = st.pills(
+    "メニュー",
+    ["メンズカット", "パーマ", "ツイストスパイラル", "波巻きパーマ", "カラー", "ブリーチ", "縮毛矯正", "眉毛カット", "ヘッドスパ"],
+    selection_mode="multi",
+    label_visibility="collapsed"
+)
 
-    points = st.multiselect(
-        "良かったポイント",
-        ["セットが楽になった", "似合う髪型を提案してくれた", "説明が丁寧", "店の雰囲気が良い", "スピーディー", "また来たい"]
-    )
-    
-    submit_button = st.form_submit_button("口コミを生成する ✨")
+st.write("")
+
+# 星評価
+st.caption("② 本日の満足度")
+rating_stars = st.feedback("stars")
+rating = (rating_stars + 1) if rating_stars is not None else 5
+
+st.write("")
+
+# pillsでポイント選択
+st.caption("③ 気に入ったポイント（複数選択可）")
+points = st.pills(
+    "ポイント",
+    ["セットが楽になった", "似合う髪型にしてくれた", "カウンセリングが丁寧", "店の雰囲気が良い", "スピーディー", "また来たい"],
+    selection_mode="multi",
+    label_visibility="collapsed"
+)
+
+st.divider() # 区切り線
+
+# 生成ボタン
+submit_button = st.button("口コミを生成する ✨")
 
 # --- 🤖 生成ロジック ---
 if submit_button:
@@ -92,7 +146,7 @@ if submit_button:
     else:
         client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
         
-        # 名前処理（苗字抽出）
+        # 名前処理
         if staff_name and staff_name != "指名なし":
             short_name = staff_name.replace("　", " ").split(" ")[0]
             staff_prompt = f"担当の「{short_name}」さんについても好意的に触れてください。"
@@ -113,7 +167,10 @@ if submit_button:
         - 嘘は書かず、実体験のように書く
         """
 
-        with st.spinner("AIが執筆中..."):
+        # シンプルで見やすいローディング
+        with st.status("AIが執筆中...", expanded=True) as status:
+            st.write("少々お待ちください...")
+            
             try:
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
@@ -121,22 +178,27 @@ if submit_button:
                 )
                 generated_text = response.choices[0].message.content
                 
-                st.success("生成されました！右上のアイコンでコピーできます")
+                status.update(label="完了しました！", state="complete", expanded=False)
+                st.toast('生成完了！', icon='✅')
+                
+                st.success("下のボックスからコピーできます 👇")
                 st.code(generated_text, language=None)
                 
+                # Googleマップボタン（青色で目立たせる）
                 st.markdown(f"""
                 <a href="{selected_store_link}" target="_blank">
                     <button style="
                         width:100%; 
                         padding:15px; 
-                        background-color:#4285F4; 
+                        background: #1A73E8; 
                         color:white; 
                         border:none; 
-                        border-radius:12px; 
+                        border-radius:30px; 
                         font-weight:bold; 
                         font-size:16px; 
                         cursor:pointer;
-                        margin-top: 10px;">
+                        box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);
+                        margin-top: 15px;">
                         Googleマップを開いて投稿 📍
                     </button>
                 </a>
