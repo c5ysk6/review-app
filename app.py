@@ -4,7 +4,6 @@ import pandas as pd
 
 # --- ⚙️ 設定エリア ---
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
-
 # 店舗リスト
 STORES = {
     "メンズサロン EIGHT MEN 渋谷店": "https://g.page/r/CdXIDXyii4lgEAE/review",
@@ -37,13 +36,8 @@ MOTIVATION_LIST = [
     "ビジネス・就活で使いたい", "ガラッとイメチェンしたい", "自分に似合う髪型を知りたい", "その他"
 ]
 ATMOSPHERE_LIST = [
-    "丁寧なカウンセリング", 
-    "会話が楽しく盛り上がった",
-    "静かにリラックスできた",
-    "テキパキして早かった",
-    "プロの技術・アドバイス", 
-    "店内がお洒落で清潔",
-    "その他"
+    "丁寧なカウンセリング", "会話が楽しく盛り上がった", "静かにリラックスできた",
+    "テキパキして早かった", "プロの技術・アドバイス", "店内がお洒落で清潔", "その他"
 ]
 
 # --- 🎨 ページ設定 & デザイン ---
@@ -87,17 +81,12 @@ def load_staff_data():
 
 staff_data_dict = load_staff_data()
 
-# --- 🖼️ ロゴ表示（新しいロゴに変更） ---
-# [1, 3]の割合で分割し、左側の狭いエリアにロゴを置く
-col1, col2 = st.columns([1, 3])
-
-with col1:
-    try:
-        # 新しい画像ファイル名に変更
-        # width=100 でサイズを小さく固定し、左上にアイコン的に表示
-        st.image("B.jpg", width=100)
-    except:
-        st.write("EIGHT MEN")
+# --- 🖼️ ロゴ表示（全幅表示） ---
+try:
+    # use_container_width=True で画面幅いっぱいに表示
+    st.image("B.jpg", use_container_width=True)
+except:
+    st.markdown("<h1 style='text-align: center;'>EIGHT MEN</h1>", unsafe_allow_html=True)
 
 # --- 📍 店舗選択 ---
 query_params = st.query_params
@@ -113,11 +102,11 @@ if url_store_param:
 if found_store_name:
     selected_store_name = found_store_name
 else:
-    # URLにない場合は下の段で選択させる
+    # URLにない場合は選択させる
     selected_store_name = st.selectbox("ご利用の店舗", list(STORES.keys()))
 
 # 店舗名の表示
-st.markdown(f"<h3 style='margin-top: 10px;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='margin-top: 10px; text-align: center;'>📍 {selected_store_name}</h3>", unsafe_allow_html=True)
 
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
@@ -130,7 +119,9 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 st.divider()
-st.write("🤖 **AIにお任せする方はこちら**")
+
+# --- 🤖 ここを大きくしました ---
+st.markdown("#### 🤖 AIにお任せする方はこちら")
 st.write("簡単な質問に答えるだけで、下書きを作成します。")
 st.write("")
 
