@@ -31,7 +31,21 @@ STORE_AREAS = {
     "EIGHT MEN 那覇新都心店": "那覇新都心・おもろまち",
 }
 
-# リスト定義
+# --- リスト定義（ここを修正・整理しました） ---
+
+# メニューリスト
+MENU_LIST = [
+    "メンズカット", 
+    "カラー", 
+    "ブリーチ", 
+    "パーマ", 
+    "ストレートパーマ", 
+    "縮毛矯正", 
+    "眉毛カット", 
+    "ヘッドスパ"
+]
+
+# 来店動機リスト
 MOTIVATION_LIST = [
     "伸びたから短くしたい",
     "広がり・癖を抑えたい",
@@ -43,15 +57,15 @@ MOTIVATION_LIST = [
     "その他"
 ]
 
-# 修正箇所：全角スペースや全角クォーテーションを削除・修正しました
+# 雰囲気リスト
 ATMOSPHERE_LIST = [
     "会話が楽しく盛り上がった",
+    "店内がお洒落",
     "静かにリラックスできた",
     "丁寧なカウンセリング",
     "テキパキして早かった",
     "プロの技術・アドバイス",
-    "店内がお洒落",
-    "要望を汲み取ってくれた",
+    "要望をうまく汲み取ってくれた",
     "その他"
 ]
 
@@ -87,7 +101,7 @@ st.markdown("""
     .stTextInput > div > div > input {
         border-radius: 10px;
         padding: 10px;
-        font-size: 12px; /* 文字サイズを小さく統一 */
+        font-size: 12px; 
     }
     </style>
     """, unsafe_allow_html=True)
@@ -163,16 +177,33 @@ current_staff_list = staff_data_dict.get(csv_store_key, [])
 if not current_staff_list:
     current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
 
+# selectboxはデフォルトで一番目が選択されるため、そのままでOK
 staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
 
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">②</span>本日のメニュー（複数可）</span>', unsafe_allow_html=True)
-menu = st.pills("メニュー", ["メンズカット", "カラー", "ブリーチ", "パーマ", "ストレートパーマ", "縮毛矯正", "眉毛カット", "ヘッドスパ"], selection_mode="multi", label_visibility="collapsed")
+
+# default引数にリストの最初の要素を指定
+menu = st.pills(
+    "メニュー", 
+    MENU_LIST, 
+    selection_mode="multi", 
+    default=[MENU_LIST[0]], # 「メンズカット」をデフォルト選択
+    label_visibility="collapsed"
+)
 
 st.write("")
 # ③ お悩み・動機
 st.markdown('<span class="step-label"><span class="step-number">③</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
-motivations = st.pills("きっかけ", MOTIVATION_LIST, selection_mode="multi", label_visibility="collapsed")
+
+# default引数にリストの最初の要素を指定
+motivations = st.pills(
+    "きっかけ", 
+    MOTIVATION_LIST, 
+    selection_mode="multi", 
+    default=[MOTIVATION_LIST[0]], # 「伸びたから短くしたい」をデフォルト選択
+    label_visibility="collapsed"
+)
 
 # 【条件分岐】「その他」が選択されている場合のみ入力欄を表示
 motivation_detail = ""
@@ -186,7 +217,15 @@ if motivations and "その他" in motivations:
 st.write("")
 # ④ 雰囲気
 st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客の良かったところ（感想）</span>', unsafe_allow_html=True)
-atmospheres = st.pills("雰囲気", ATMOSPHERE_LIST, selection_mode="multi", label_visibility="collapsed")
+
+# default引数にリストの最初の要素を指定
+atmospheres = st.pills(
+    "雰囲気", 
+    ATMOSPHERE_LIST, 
+    selection_mode="multi", 
+    default=[ATMOSPHERE_LIST[0]], # 「会話が楽しく盛り上がった」をデフォルト選択
+    label_visibility="collapsed"
+)
 
 # 【条件分岐】「その他」が選択されている場合のみ入力欄を表示
 atmosphere_detail = ""
@@ -202,7 +241,7 @@ submit_button = st.button("口コミを生成する ✨")
 
 # --- 🤖 生成ロジック ---
 if submit_button:
-    # 必須チェック（メニューか動機か雰囲気が選ばれていればOK）
+    # 必須チェック（デフォルト選択があるため、実質的にチェックは不要だが念のため残す）
     if not menu and not motivations and not atmospheres and not motivation_detail and not atmosphere_detail:
         st.warning("項目をいくつか選択してください")
     else:
