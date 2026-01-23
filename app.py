@@ -216,7 +216,7 @@ if motivations and "その他" in motivations:
 
 st.write("")
 # ④ 雰囲気
-st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客の良かったところ（感想）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">④</span>店内の雰囲気・接客の良かった点</span>', unsafe_allow_html=True)
 
 # default引数にリストの最初の要素を指定
 atmospheres = st.pills(
