@@ -210,7 +210,7 @@ motivations = st.pills(
     "きっかけ", 
     MOTIVATION_LIST, 
     selection_mode="multi", 
-    default=[], # 初期状態を未選択に
+    default=[], 
     label_visibility="collapsed"
 )
 
@@ -229,7 +229,7 @@ atmospheres = st.pills(
     "雰囲気", 
     ATMOSPHERE_LIST, 
     selection_mode="multi", 
-    default=[], # 初期状態を未選択に
+    default=[], 
     label_visibility="collapsed"
 )
 
@@ -289,8 +289,10 @@ if submit_button:
                 )
                 review_text = response.choices[0].message.content
 
-            st.success("✅ 作成完了！以下のテキストをコピーしてください")
-            st.text_area("生成された口コミ", review_text, height=200, label_visibility="collapsed")
+            # 💡 ここが変更点です！
+            st.success("✅ 作成完了！枠の右上にあるアイコン（📋）から1タップでコピーできます！")
+            st.code(review_text, language="text", wrap_lines=True)
+            
             st.markdown(f"""<a href="{selected_store_link}" target="_blank"><button style="width: 100%; background-color: #4285F4; color: white; padding: 14px; border: none; border-radius: 30px; font-weight: bold; margin-top: 10px; font-size: 18px; cursor: pointer;">Googleマップを開いて投稿する 🌍</button></a>""", unsafe_allow_html=True)
 
         except Exception as e:
