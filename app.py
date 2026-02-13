@@ -249,11 +249,11 @@ if submit_button:
     if not menu and not motivations and not atmospheres and not motivation_detail and not atmosphere_detail:
         st.warning("項目をいくつか選択してください")
     else:
-        # 💡 スタッフ名を苗字だけにする処理（全角・半角スペースに対応）
+        # スタッフ名を苗字だけにする処理
         staff_last_name = staff_name.replace("　", " ").split(" ")[0] if staff_name != "指定しない" else "スタッフ"
 
         # データ整形
-        menu_text = "と".join(menu) if menu else "カット" # カンマではなく「と」で繋ぐことで自然に
+        menu_text = "と".join(menu) if menu else "カット"
         
         # 動機の処理
         clean_motivations = [m for m in motivations if m != "その他"] if motivations else []
@@ -269,20 +269,20 @@ if submit_button:
             atmosphere_text_parts.append(atmosphere_detail)
         atmosphere_final_text = "、".join(atmosphere_text_parts) if atmosphere_text_parts else "良かった"
 
-        # 💡 プロンプトを大幅に自然な口語調へアップデート
+        # 💡 プロンプトをさらに厳密に修正！
         system_instruction = f"""
         あなたは「{selected_store_name}」に通う、トレンドに敏感な20代〜30代の男性客です。
-        入力情報を元に、Googleマップ用の自然な口コミを150文字以内で作成してください。
+        【美容室（メンズサロン）での体験】について、Googleマップ用の自然な口コミを150文字以内で作成してください。
 
         【重要ルール：AIっぽさを消すための絶対条件】
-        1. 「〜に行きました」は禁止。「{area_keyword}」のエリア名を文脈に自然に混ぜる。
-        2. 店名を連呼せず「ここ」「このお店」など自然な指示語を使う。
-        3. 「担当：{staff_name}」「メニュー：{menu_text}」のような箇条書き・業務報告のような書き方は絶対にしない。「{staff_last_name}さんに{menu_text}をお願いしました」のように自然な会話文に溶け込ませる。
+        1. 【エリア名の自然な使い方】「{area_keyword}のこのお店」という直訳のような不自然な表現は絶対禁止。代わりに「{area_keyword}の職場から近くて」「わざわざ{area_keyword}まで通ってます」「{area_keyword}周辺で予定がある時に」など、自分の生活圏や行動パターンに馴染んだ自然な形でエリア名を混ぜること。店名は出さなくてよい。
+        2. 【美容室としての文脈を厳守】お客様は「髪を切る」ために来ています。「静かにリラックスできた」という情報を「作業に集中できた」「勉強が捗る」などカフェやコワーキングスペースのように勘違いして書くのは絶対に禁止。「落ち着いて過ごせた」「シャンプーでウトウトしてしまった」「タブレットで動画を見てくつろげた」など、美容室として100%自然な感想に変換すること。
+        3. 「担当：{staff_name}」「メニュー：{menu_text}」のような箇条書きは禁止。「{staff_last_name}さんに{menu_text}をお願いして〜」と文脈に溶け込ませる。
         4. 来店動機・悩み「{motivation_final_text}」について、どう解決したか（ベネフィット）を書く。
         5. 雰囲気・感想「{atmosphere_final_text}」を反映させる。
         6. 今回の来店回数は「{visit_count}」です。初回なら「初めての利用」という背景を、2回目以降なら「リピートしている」ニュアンスを自然に含める。
-        7. 【禁止ワード】AI特有の不自然な表現（例：「プロフェッショナルな」「至福のひととき」「まるで〜のようです」「大変満足しております」「強くお勧めします」など）は絶対に使わない。
-        8. 【文体】スマホでサクッと書いたような、少しラフでリアルな口語体（「〜でよかったです！」「〜してもらいました」「最高です」「また行きます」など）にする。文末も「〜です。〜ます。」ばかりでなく、体言止めや「！」を適度に混ぜてテンポ良くする。
+        7. 【禁止ワード】AI特有の不自然な表現（「プロフェッショナルな」「至福のひととき」「まるで〜のようです」「大変満足しております」「強くお勧めします」）は絶対に使わない。
+        8. 【文体】スマホでサクッと書いたような、少しラフでリアルな口語体（「〜でよかったです！」「〜してもらいました」「最高です」「また行きます」など）にする。
         """
         user_content = f"動機・悩み: {motivation_final_text}\n雰囲気・感想: {atmosphere_final_text}"
 
@@ -292,7 +292,7 @@ if submit_button:
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}],
-                    temperature=0.8, # 少し高めにして表現の揺らぎ（人間らしさ）を出す
+                    temperature=0.8,
                 )
                 review_text = response.choices[0].message.content
 
@@ -303,4 +303,3 @@ if submit_button:
 
         except Exception as e:
             st.error("エラーが発生しました。APIキーを確認してください。")
-            
