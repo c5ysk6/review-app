@@ -210,7 +210,7 @@ motivations = st.pills(
     "きっかけ", 
     MOTIVATION_LIST, 
     selection_mode="multi", 
-    default=[MOTIVATION_LIST[0]], 
+    default=[], # 初期状態を未選択に
     label_visibility="collapsed"
 )
 
@@ -229,7 +229,7 @@ atmospheres = st.pills(
     "雰囲気", 
     ATMOSPHERE_LIST, 
     selection_mode="multi", 
-    default=[ATMOSPHERE_LIST[0]], 
+    default=[], # 初期状態を未選択に
     label_visibility="collapsed"
 )
 
