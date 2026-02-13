@@ -223,7 +223,7 @@ if motivations and "その他" in motivations:
     )
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">⑤</span>店内の雰囲気・接客の良かった点</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">⑤</span>店内の雰囲気・接客の良かった点（複数可）</span>', unsafe_allow_html=True)
 
 atmospheres = st.pills(
     "雰囲気", 
