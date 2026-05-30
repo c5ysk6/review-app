@@ -71,16 +71,16 @@ ATMOSPHERE_LIST = [
     "その他"
 ]
 
-# 良かった点アイコン
+# 良かった点アイコン（Material Symbols 線画）
 ATMOSPHERE_ICONS = {
-    "接客・対応": "👤",
-    "技術・仕上がり": "✂️",
-    "カウンセリング": "💬",
-    "店内の雰囲気": "🛋️",
-    "清潔感": "✨",
-    "予約のしやすさ": "📅",
-    "価格の満足度": "💴",
-    "その他": "…",
+    "接客・対応": ":material/person:",
+    "技術・仕上がり": ":material/content_cut:",
+    "カウンセリング": ":material/chat_bubble:",
+    "店内の雰囲気": ":material/weekend:",
+    "清潔感": ":material/auto_awesome:",
+    "予約のしやすさ": ":material/event:",
+    "価格の満足度": ":material/currency_yen:",
+    "その他": ":material/more_horiz:",
 }
 
 # --- 🎨 ページ設定 & デザイン ---
@@ -331,16 +331,17 @@ st.markdown("""
         margin-bottom: 10px;
     }
 
-    /* ====== 必須バッジ ====== */
+    /* ====== 必須バッジ（黒枠ニュートラル） ====== */
     .required-badge {
         display: inline-block;
         margin-left: 10px;
         padding: 2px 8px;
-        background: #FCE4E4;
-        color: #C62828;
+        background: transparent;
+        color: #0F0F0F;
+        border: 1px solid #0F0F0F;
         font-size: 10px;
         font-weight: 600;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.15em;
         border-radius: 2px;
         vertical-align: middle;
         line-height: 1.4;
