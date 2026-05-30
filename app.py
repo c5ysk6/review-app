@@ -1,3 +1,4 @@
+import base64
 import streamlit as st
 from openai import OpenAI
 import pandas as pd
@@ -71,17 +72,23 @@ ATMOSPHERE_LIST = [
     "その他"
 ]
 
-# 良かった点アイコン（Material Symbols 線画）
-ATMOSPHERE_ICONS = {
-    "接客・対応": ":material/person:",
-    "技術・仕上がり": ":material/content_cut:",
-    "カウンセリング": ":material/chat_bubble:",
-    "店内の雰囲気": ":material/weekend:",
-    "清潔感": ":material/auto_awesome:",
-    "予約のしやすさ": ":material/event:",
-    "価格の満足度": ":material/currency_yen:",
-    "その他": ":material/more_horiz:",
+# 良かった点アイコン（インラインSVG・線画）
+_ATM_SVG = {
+    "接客・対応": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>',
+    "技術・仕上がり": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg>',
+    "カウンセリング": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    "店内の雰囲気": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>',
+    "清潔感": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8L4 11l5.8 1.9L12 18l1.9-5.8L20 11l-5.8-1.9z"/><path d="M18 18l-.7 1.9L15.4 21l1.9.7L18 23l.7-1.9L20.6 21l-1.9-.7z"/></svg>',
+    "予約のしやすさ": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>',
+    "価格の満足度": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4 3-4M9 13h6M9 16h6M12 12v6"/></svg>',
+    "その他": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="#0F0F0F"/><circle cx="12" cy="12" r="1" fill="#0F0F0F"/><circle cx="16" cy="12" r="1" fill="#0F0F0F"/></svg>',
 }
+
+def _svg_to_md_img(svg: str) -> str:
+    b64 = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+    return f"![](data:image/svg+xml;base64,{b64})"
+
+ATMOSPHERE_ICONS = {k: _svg_to_md_img(v) for k, v in _ATM_SVG.items()}
 
 # --- 🎨 ページ設定 & デザイン ---
 st.set_page_config(page_title="GUEST REVIEW", layout="centered")
@@ -348,11 +355,13 @@ st.markdown("""
         font-size: 13px !important;
         letter-spacing: 0.02em !important;
     }
-    /* カード内のMaterial Symbolsアイコンサイズ調整 */
-    div[data-testid="stVerticalBlockBorderWrapper"] span.material-symbols-outlined {
-        font-size: 18px !important;
-        color: #0F0F0F !important;
+    /* カード内のSVGアイコン（markdown image）のサイズ・整列 */
+    div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] img {
+        width: 18px !important;
+        height: 18px !important;
         vertical-align: middle !important;
+        margin-right: 4px !important;
+        display: inline-block !important;
     }
 
     /* ====== 必須バッジ（黒枠ニュートラル） ====== */
