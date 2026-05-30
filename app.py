@@ -431,7 +431,6 @@ st.markdown("<p style='color: #666; font-size: 13px; letter-spacing: 0.03em; mar
 
 # --- ステップ・プログレス ---
 st.markdown("""
-<div class="progress-eyebrow">5 Steps</div>
 <div class="progress-wrap">
     <div class="progress-step">1</div>
     <div class="progress-line"></div>
@@ -468,15 +467,14 @@ visit_count = st.pills(
 )
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">03</span>本日のメニュー（複数可）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">03</span>ご利用いただいたサービス（複数可）</span>', unsafe_allow_html=True)
 
-menu = st.pills(
-    "メニュー", 
-    MENU_LIST, 
-    selection_mode="multi", 
-    default=[MENU_LIST[0]], 
-    label_visibility="collapsed"
-)
+menu_cols = st.columns(2)
+menu = []
+for i, item in enumerate(MENU_LIST):
+    with menu_cols[i % 2]:
+        if st.checkbox(item, value=(i == 0), key=f"menu_{item}"):
+            menu.append(item)
 
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">04</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
