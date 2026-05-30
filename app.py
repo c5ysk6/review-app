@@ -343,9 +343,15 @@ st.markdown("""
         border: 1px solid #D8D2C5 !important;
         border-radius: 2px !important;
         background: #FFFFFF !important;
-        padding: 8px 10px !important;
+        padding: 10px 12px !important;
         margin-bottom: 10px !important;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        min-height: 68px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    div[data-testid="stVerticalBlockBorderWrapper"] > div {
+        width: 100% !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
         border-color: #0F0F0F !important;
@@ -362,6 +368,20 @@ st.markdown("""
         vertical-align: middle !important;
         margin-right: 4px !important;
         display: inline-block !important;
+    }
+
+    /* ====== スマホ：列を強制的に2列で折り返す ====== */
+    @media (max-width: 640px) {
+        [data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+        }
+        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+            flex: 0 0 calc(50% - 4px) !important;
+            max-width: calc(50% - 4px) !important;
+            min-width: calc(50% - 4px) !important;
+            width: calc(50% - 4px) !important;
+        }
     }
 
     /* ====== 必須バッジ（黒枠ニュートラル） ====== */
