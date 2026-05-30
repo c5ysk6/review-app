@@ -420,24 +420,14 @@ st.markdown("""
         letter-spacing: 0.02em !important;
     }
 
-    /* ====== サブ選択肢セクション（グリッド下） ====== */
-    .sub-section-label {
-        font-family: "Playfair Display", "Noto Serif JP", serif;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: #0F0F0F;
-        margin: 24px 0 16px 0;
-        padding-top: 18px;
-        border-top: 1px solid #D8D2C5;
-    }
+    /* ====== サブ選択肢カテゴリラベル（カード直下） ====== */
     .sub-category-label {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 600;
         color: #1E3A8A;
-        margin: 14px 0 8px 0;
-        letter-spacing: 0.06em;
+        margin: 0 0 8px 0;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
     }
     /* カード内のSVGアイコン（markdown image）のサイズ・整列 */
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] img {
@@ -448,11 +438,12 @@ st.markdown("""
         display: inline-block !important;
     }
 
-    /* ====== ステップ5：CSS Gridで行優先レイアウト ====== */
-    /* デスクトップ 3列、スマホ 2列。順序がそのまま読み進められる */
+    /* ====== ステップ5：CSS Grid + dense flow ====== */
+    /* デスクトップ3列・スマホ2列。サブ選択肢は該当カード直下に全幅で挿入 */
     .st-key-atm_grid [data-testid="stVerticalBlock"] {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
+        grid-auto-flow: dense !important;
         gap: 10px !important;
     }
     @media (max-width: 640px) {
@@ -463,6 +454,17 @@ st.markdown("""
     /* グリッド内のカード余白はgapで管理するのでmargin-bottom削除 */
     .st-key-atm_grid [data-testid="stVerticalBlockBorderWrapper"] {
         margin-bottom: 0 !important;
+    }
+
+    /* サブ選択肢コンテナ（チェック中カードの直下、全幅） */
+    .st-key-atm_grid [data-testid="stElementContainer"]:has([class*="st-key-atm_subs_"]),
+    .st-key-atm_grid > [data-testid="stVerticalBlock"] > [class*="st-key-atm_subs_"] {
+        grid-column: 1 / -1 !important;
+    }
+    .st-key-atm_grid [class*="st-key-atm_subs_"] {
+        padding: 8px 14px 4px 14px !important;
+        border-left: 2px solid #1E3A8A !important;
+        background: rgba(30, 58, 138, 0.04) !important;
     }
 
     /* ====== ステップ3（メニュー）等のスマホ折り返し ====== */
@@ -675,29 +677,26 @@ st.write("")
 st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数選択可）<span class="required-badge">必須</span></span>', unsafe_allow_html=True)
 
 atmospheres = []
-with st.container(key="atm_grid"):
-    for item in ATMOSPHERE_LIST:
-        with st.container(border=True):
-            if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
-                atmospheres.append(item)
-
-# --- グリッド下にサブ選択肢セクション ---
 atmosphere_subdetails = {}
-checked_with_subs = [a for a in atmospheres if ATMOSPHERE_SUBOPTIONS.get(a)]
-if checked_with_subs:
-    st.markdown('<div class="sub-section-label">さらに詳しく（任意・複数可）</div>', unsafe_allow_html=True)
-    for atm in checked_with_subs:
-        st.markdown(f'<div class="sub-category-label">{atm}</div>', unsafe_allow_html=True)
-        sel = st.pills(
-            f"{atm}_詳細",
-            ATMOSPHERE_SUBOPTIONS[atm],
-            selection_mode="multi",
-            default=[],
-            key=f"atm_sub_{atm}",
-            label_visibility="collapsed",
-        )
-        if sel:
-            atmosphere_subdetails[atm] = sel
+with st.container(key="atm_grid"):
+    for idx, item in enumerate(ATMOSPHERE_LIST):
+        with st.container(border=True):
+            checked = st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}")
+        if checked:
+            atmospheres.append(item)
+            if ATMOSPHERE_SUBOPTIONS.get(item):
+                with st.container(key=f"atm_subs_{idx}"):
+                    st.markdown(f'<div class="sub-category-label">{item}</div>', unsafe_allow_html=True)
+                    sel = st.pills(
+                        f"{item}_詳細",
+                        ATMOSPHERE_SUBOPTIONS[item],
+                        selection_mode="multi",
+                        default=[],
+                        key=f"atm_sub_{item}",
+                        label_visibility="collapsed",
+                    )
+                    if sel:
+                        atmosphere_subdetails[item] = sel
 
 atmosphere_detail = ""
 if atmospheres and "その他" in atmospheres:
