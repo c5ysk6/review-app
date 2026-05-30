@@ -331,6 +331,30 @@ st.markdown("""
         margin-bottom: 10px;
     }
 
+    /* ====== チェックボックス・カード（良かった点） ====== */
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        border: 1px solid #D8D2C5 !important;
+        border-radius: 2px !important;
+        background: #FFFFFF !important;
+        padding: 8px 10px !important;
+        margin-bottom: 10px !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+        border-color: #0F0F0F !important;
+        box-shadow: 0 2px 8px rgba(15, 15, 15, 0.06);
+    }
+    div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] label {
+        font-size: 13px !important;
+        letter-spacing: 0.02em !important;
+    }
+    /* カード内のMaterial Symbolsアイコンサイズ調整 */
+    div[data-testid="stVerticalBlockBorderWrapper"] span.material-symbols-outlined {
+        font-size: 18px !important;
+        color: #0F0F0F !important;
+        vertical-align: middle !important;
+    }
+
     /* ====== 必須バッジ（黒枠ニュートラル） ====== */
     .required-badge {
         display: inline-block;
@@ -530,8 +554,9 @@ atmosphere_cols = st.columns(3)
 atmospheres = []
 for i, item in enumerate(ATMOSPHERE_LIST):
     with atmosphere_cols[i % 3]:
-        if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
-            atmospheres.append(item)
+        with st.container(border=True):
+            if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
+                atmospheres.append(item)
 
 atmosphere_detail = ""
 if atmospheres and "その他" in atmospheres:
