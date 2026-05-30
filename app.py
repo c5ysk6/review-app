@@ -59,17 +59,29 @@ MOTIVATION_LIST = [
     "その他"
 ]
 
-# 雰囲気リスト
+# 良かった点リスト
 ATMOSPHERE_LIST = [
-    "会話が楽しく盛り上がった",
-    "店内がお洒落",
-    "静かにリラックスできた",
-    "丁寧なカウンセリング",
-    "テキパキして早かった",
-    "プロの技術・アドバイス",
-    "要望をうまく汲み取ってくれた",
+    "接客・対応",
+    "技術・仕上がり",
+    "カウンセリング",
+    "店内の雰囲気",
+    "清潔感",
+    "予約のしやすさ",
+    "価格の満足度",
     "その他"
 ]
+
+# 良かった点アイコン
+ATMOSPHERE_ICONS = {
+    "接客・対応": "👤",
+    "技術・仕上がり": "✂️",
+    "カウンセリング": "💬",
+    "店内の雰囲気": "🛋️",
+    "清潔感": "✨",
+    "予約のしやすさ": "📅",
+    "価格の満足度": "💴",
+    "その他": "…",
+}
 
 # --- 🎨 ページ設定 & デザイン ---
 st.set_page_config(page_title="GUEST REVIEW", layout="centered")
@@ -319,6 +331,21 @@ st.markdown("""
         margin-bottom: 10px;
     }
 
+    /* ====== 必須バッジ ====== */
+    .required-badge {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 2px 8px;
+        background: #FCE4E4;
+        color: #C62828;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        border-radius: 2px;
+        vertical-align: middle;
+        line-height: 1.4;
+    }
+
     /* ====== フッター・サイン ====== */
     .footer-mark {
         margin-top: 48px;
@@ -496,15 +523,14 @@ if motivations and "その他" in motivations:
     )
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">05</span>店内の雰囲気・接客の良かった点（複数可）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数選択可）<span class="required-badge">必須</span></span>', unsafe_allow_html=True)
 
-atmospheres = st.pills(
-    "雰囲気", 
-    ATMOSPHERE_LIST, 
-    selection_mode="multi", 
-    default=[], 
-    label_visibility="collapsed"
-)
+atmosphere_cols = st.columns(3)
+atmospheres = []
+for i, item in enumerate(ATMOSPHERE_LIST):
+    with atmosphere_cols[i % 3]:
+        if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
+            atmospheres.append(item)
 
 atmosphere_detail = ""
 if atmospheres and "その他" in atmospheres:
