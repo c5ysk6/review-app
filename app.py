@@ -76,184 +76,184 @@ st.set_page_config(page_title="GUEST REVIEW", layout="centered")
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-    /* ベース：グレイッシュブルー基調 */
+    /* ベース：クリーム背景＋エディトリアル */
     html, body, [class*="css"] {
         font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #2C3E50;
+        color: #0F0F0F;
         letter-spacing: 0.02em;
     }
     .stApp {
-        background:
-            radial-gradient(ellipse at top, #DDE5EE 0%, #ECEFF4 45%, #E1E7EF 100%);
-        background-attachment: fixed;
+        background-color: #F5F1E8;
     }
     .block-container {
-        padding-top: 2rem;
+        padding-top: 2.5rem;
         padding-bottom: 3rem;
         max-width: 560px;
     }
 
-    /* メインのフォームエリアを白カード風に見せる */
-    section.main > div.block-container {
-        position: relative;
-    }
-
-    /* 生成ボタン（ディープスレートブルー） */
+    /* 生成ボタン：コバルトブルー */
     .stButton>button {
         width: 100%;
-        border-radius: 6px;
+        border-radius: 2px;
         font-weight: 600;
-        padding: 18px;
-        background: linear-gradient(135deg, #3D5170 0%, #5B7A99 100%);
+        padding: 20px;
+        background: #1E3A8A;
         color: #FFFFFF;
         border: none;
-        box-shadow: 0 6px 16px rgba(61, 81, 112, 0.25);
+        box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);
         transition: all 0.25s ease;
-        font-size: 14px;
-        letter-spacing: 0.18em;
-        margin-top: 20px;
+        font-size: 13px;
+        letter-spacing: 0.25em;
+        margin-top: 24px;
+        text-transform: uppercase;
     }
     .stButton>button:hover {
-        background: linear-gradient(135deg, #2E3F5A 0%, #4A6685 100%);
+        background: #15296B;
         transform: translateY(-1px);
-        box-shadow: 0 10px 24px rgba(61, 81, 112, 0.35);
+        box-shadow: 0 12px 28px rgba(30, 58, 138, 0.35);
     }
     .stButton>button:active {
         transform: translateY(0);
-        box-shadow: 0 4px 10px rgba(61, 81, 112, 0.2);
     }
 
-    /* 直行ボタン（青みアウトライン） */
+    /* 直行ボタン：黒アウトライン */
     .direct-link-btn {
         display: block;
         width: 100%;
         text-align: center;
-        padding: 14px;
+        padding: 16px;
         margin: 24px 0 12px 0;
-        background-color: #FFFFFF;
-        color: #3D5170;
-        border: 1px solid #B8C5D4;
-        border-radius: 6px;
+        background-color: transparent;
+        color: #0F0F0F;
+        border: 1px solid #0F0F0F;
+        border-radius: 2px;
         text-decoration: none;
         font-weight: 500;
-        font-size: 13px;
-        letter-spacing: 0.05em;
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
         transition: all 0.2s ease;
-        box-shadow: 0 2px 6px rgba(91, 122, 153, 0.06);
     }
     .direct-link-btn:hover {
-        border-color: #5B7A99;
-        background-color: #F5F8FB;
-        box-shadow: 0 4px 12px rgba(91, 122, 153, 0.12);
+        background-color: #0F0F0F;
+        color: #F5F1E8;
     }
 
-    /* ステップラベル */
+    /* ステップラベル：番号は円形チップ */
     .step-label {
-        color: #2C3E50;
+        color: #0F0F0F;
         font-weight: 600;
         font-size: 14px;
-        margin-bottom: 12px;
-        display: block;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
         letter-spacing: 0.04em;
     }
     .step-number {
-        color: #5B7A99;
-        font-weight: 500;
-        font-family: "Inter", sans-serif;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #0F0F0F;
+        color: #F5F1E8;
+        font-family: "Playfair Display", serif;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0;
         margin-right: 12px;
-        font-size: 12px;
-        letter-spacing: 0.15em;
-        background: #E1E7EF;
-        padding: 3px 8px;
-        border-radius: 3px;
+        line-height: 1;
     }
 
-    /* 見出し */
+    /* 見出し：セリフ体エディトリアル */
     h3 {
-        color: #2C3E50 !important;
+        color: #0F0F0F !important;
         margin-bottom: 0px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.05em !important;
+        font-family: "Playfair Display", "Noto Serif JP", serif !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
     }
     h4 {
-        color: #2C3E50 !important;
+        color: #0F0F0F !important;
         font-weight: 600 !important;
-        letter-spacing: 0.04em !important;
-        margin-top: 8px !important;
-        font-size: 16px !important;
+        letter-spacing: 0.15em !important;
+        margin-top: 12px !important;
+        font-size: 13px !important;
+        text-transform: uppercase !important;
     }
 
     /* 入力フィールド */
     .stTextInput > div > div > input {
-        border-radius: 6px;
-        padding: 12px;
+        border-radius: 2px;
+        padding: 14px;
         font-size: 14px;
-        border: 1px solid #C5D0DE;
+        border: 1px solid #D8D2C5;
         background-color: #FFFFFF;
-        color: #2C3E50;
+        color: #0F0F0F;
     }
     .stTextInput > div > div > input:focus {
-        border-color: #5B7A99;
-        box-shadow: 0 0 0 3px rgba(91, 122, 153, 0.15);
+        border-color: #1E3A8A;
+        box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.12);
     }
 
     /* セレクトボックス */
     .stSelectbox > div > div {
-        border-radius: 6px;
-        border: 1px solid #C5D0DE;
+        border-radius: 2px;
+        border: 1px solid #D8D2C5;
         background-color: #FFFFFF;
     }
     .stSelectbox > div > div:hover {
-        border-color: #5B7A99;
+        border-color: #0F0F0F;
     }
 
-    /* Pills（選択UI）の調整 */
+    /* Pills 共通 */
     button[data-baseweb="button"] {
-        border-radius: 6px !important;
+        border-radius: 2px !important;
         font-weight: 500 !important;
+        letter-spacing: 0.04em !important;
     }
 
-    /* Pills 非選択（白カード×青みボーダー） */
+    /* Pills 非選択：白×細枠 */
     div[data-baseweb="button-group"] button[aria-pressed="false"] {
         background-color: #FFFFFF !important;
-        border: 1px solid #C5D0DE !important;
-        color: #4A5C70 !important;
+        border: 1px solid #D8D2C5 !important;
+        color: #0F0F0F !important;
     }
     div[data-baseweb="button-group"] button[aria-pressed="false"]:hover {
-        border-color: #5B7A99 !important;
-        background-color: #F5F8FB !important;
+        border-color: #0F0F0F !important;
+        background-color: #FAF7F0 !important;
     }
 
-    /* Pills 選択中（スレートブルー塗り） */
+    /* Pills 選択中：コバルト塗り */
     div[data-baseweb="button-group"] button[aria-pressed="true"] {
-        background-color: #5B7A99 !important;
-        border: 1px solid #5B7A99 !important;
+        background-color: #1E3A8A !important;
+        border: 1px solid #1E3A8A !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 6px rgba(91, 122, 153, 0.25) !important;
+        box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2) !important;
     }
 
-    /* Divider */
+    /* Divider：細い実線 */
     hr {
         border: none !important;
         height: 1px !important;
-        background: linear-gradient(90deg, transparent 0%, #B8C5D4 50%, transparent 100%) !important;
-        margin: 1.75rem 0 !important;
+        background: #D8D2C5 !important;
+        margin: 2rem 0 !important;
     }
 
     /* 生成された口コミの表示枠 */
     .stCode {
-        border-radius: 8px;
-        border: 1px solid #C5D0DE;
+        border-radius: 2px;
+        border: 1px solid #D8D2C5;
         background-color: #FFFFFF !important;
-        box-shadow: 0 4px 12px rgba(91, 122, 153, 0.08);
     }
 
-    /* 成功・警告メッセージを青系で */
+    /* アラート */
     div[data-testid="stAlert"] {
-        border-radius: 6px;
-        border-left: 3px solid #5B7A99;
+        border-radius: 2px;
+        border-left: 3px solid #1E3A8A;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -288,16 +288,16 @@ else:
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
-# --- 店舗名表示 ---
+# --- 店舗名表示（エディトリアル） ---
 st.markdown(f"""
-<div style='text-align: center; margin: 12px 0 4px 0;'>
+<div style='text-align: center; margin: 20px 0 4px 0;'>
     <div style='
         font-size: 11px;
-        letter-spacing: 0.4em;
-        color: #5B7A99;
+        letter-spacing: 0.45em;
+        color: #1E3A8A;
         font-weight: 600;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        margin-bottom: 14px;
     '>Guest Review</div>
     <h3 style='
         margin: 0;
@@ -305,18 +305,27 @@ st.markdown(f"""
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 24px;
-        font-weight: 700;
-        letter-spacing: 0.06em;
+        font-family: "Playfair Display", "Noto Serif JP", serif;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        line-height: 1.1;
         width: 100%;
-        color: #2C3E50;
+        color: #0F0F0F;
     '>{selected_store_name}</h3>
     <div style='
-        width: 40px;
-        height: 2px;
-        background: linear-gradient(90deg, #5B7A99 0%, #B8C5D4 100%);
-        margin: 16px auto 4px auto;
-        border-radius: 2px;
+        font-size: 10px;
+        letter-spacing: 0.45em;
+        color: #6B6B6B;
+        font-weight: 500;
+        text-transform: uppercase;
+        margin-top: 12px;
+    '>Style · Cut · Life</div>
+    <div style='
+        width: 48px;
+        height: 1px;
+        background: #0F0F0F;
+        margin: 18px auto 4px auto;
     '></div>
 </div>
 """, unsafe_allow_html=True)
@@ -465,7 +474,7 @@ if submit_button:
             st.success("✅ 作成完了！枠の右上にあるアイコン（📋）から1タップでコピーできます！")
             st.code(review_text, language="text", wrap_lines=True)
             
-            st.markdown(f"""<a href="{selected_store_link}" target="_blank" style="text-decoration: none;"><button style="width: 100%; background: linear-gradient(135deg, #3D5170 0%, #5B7A99 100%); color: #FFFFFF; padding: 18px; border: none; border-radius: 6px; font-weight: 600; margin-top: 16px; font-size: 14px; letter-spacing: 0.15em; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 6px 16px rgba(61, 81, 112, 0.25);">Googleマップを開いて投稿する</button></a>""", unsafe_allow_html=True)
+            st.markdown(f"""<a href="{selected_store_link}" target="_blank" style="text-decoration: none;"><button style="width: 100%; background: #1E3A8A; color: #FFFFFF; padding: 20px; border: none; border-radius: 2px; font-weight: 600; margin-top: 16px; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);">Googleマップを開いて投稿する</button></a>""", unsafe_allow_html=True)
 
         except Exception as e:
             st.error("エラーが発生しました。APIキーを確認してください。")
