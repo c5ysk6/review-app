@@ -383,7 +383,24 @@ st.markdown("""
         display: inline-block !important;
     }
 
-    /* ====== スマホ：列を強制的に2列で折り返す ====== */
+    /* ====== ステップ5：CSS Gridで行優先レイアウト ====== */
+    /* デスクトップ 3列、スマホ 2列。順序がそのまま読み進められる */
+    .st-key-atm_grid [data-testid="stVerticalBlock"] {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+    }
+    @media (max-width: 640px) {
+        .st-key-atm_grid [data-testid="stVerticalBlock"] {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+    }
+    /* グリッド内のカード余白はgapで管理するのでmargin-bottom削除 */
+    .st-key-atm_grid [data-testid="stVerticalBlockBorderWrapper"] {
+        margin-bottom: 0 !important;
+    }
+
+    /* ====== ステップ3（メニュー）等のスマホ折り返し ====== */
     @media (max-width: 640px) {
         [data-testid="stHorizontalBlock"] {
             flex-wrap: wrap !important;
@@ -592,10 +609,9 @@ if motivations and "その他" in motivations:
 st.write("")
 st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数選択可）<span class="required-badge">必須</span></span>', unsafe_allow_html=True)
 
-atmosphere_cols = st.columns(3)
 atmospheres = []
-for i, item in enumerate(ATMOSPHERE_LIST):
-    with atmosphere_cols[i % 3]:
+with st.container(key="atm_grid"):
+    for item in ATMOSPHERE_LIST:
         with st.container(border=True):
             if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
                 atmospheres.append(item)
