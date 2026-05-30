@@ -458,15 +458,21 @@ st.markdown("""
         grid-column: 1 / -1 !important;
     }
     .st-key-atm_grid [class*="st-key-atm_subs_"] {
-        padding: 8px 14px 4px 14px !important;
-        border-left: 2px solid #1E3A8A !important;
-        background: rgba(30, 58, 138, 0.04) !important;
+        padding: 4px 0 8px 0 !important;
+        border-left: none !important;
+        background: transparent !important;
     }
-    /* サブ選択肢ピルを左詰めに揃える */
+    /* サブ選択肢ピルを左詰め＋お悩み・来店動機と同じ丸角オーバル形状 */
     .st-key-atm_grid [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] {
         justify-content: flex-start !important;
         flex-wrap: wrap !important;
-        gap: 6px !important;
+        gap: 8px !important;
+    }
+    .st-key-atm_grid [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] button {
+        border-radius: 999px !important;
+        padding: 8px 18px !important;
+        font-size: 12px !important;
+        min-height: 34px !important;
     }
 
     /* ====== ステップ3（メニュー）等のスマホ折り返し ====== */
