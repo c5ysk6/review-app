@@ -452,6 +452,17 @@ st.markdown("""
         margin-bottom: 0 !important;
     }
 
+    /* ネスト内部のstVerticalBlockはgridを継承させない（block戻し）
+       これがないとサブコンテナ内のピル親まで3列gridになり、
+       ピルが1/3幅セルに押し込まれて縦並びに見える */
+    .st-key-atm_grid [class*="st-key-atm_subs_"] [data-testid="stVerticalBlock"],
+    .st-key-atm_grid [data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"] {
+        display: block !important;
+        grid-template-columns: none !important;
+        grid-auto-flow: initial !important;
+        gap: 0 !important;
+    }
+
     /* サブ選択肢コンテナ（チェック中カードの直下、全幅） */
     .st-key-atm_grid [data-testid="stElementContainer"]:has([class*="st-key-atm_subs_"]),
     .st-key-atm_grid > [data-testid="stVerticalBlock"] > [class*="st-key-atm_subs_"] {
