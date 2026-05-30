@@ -255,8 +255,101 @@ st.markdown("""
         border-radius: 2px;
         border-left: 3px solid #1E3A8A;
     }
+
+    /* ====== ブランド・ウォードマーク（最上段） ====== */
+    .brand-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 4px 18px 4px;
+        border-bottom: 1px solid #D8D2C5;
+        margin-bottom: 28px;
+    }
+    .brand-mark {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: #0F0F0F;
+    }
+    .brand-tag {
+        font-size: 9px;
+        letter-spacing: 0.4em;
+        color: #6B6B6B;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    /* ====== ステップ・プログレス・インジケーター ====== */
+    .progress-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 8px 0 28px 0;
+        padding: 4px 0;
+    }
+    .progress-step {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid #0F0F0F;
+        color: #0F0F0F;
+        font-family: "Playfair Display", serif;
+        font-weight: 600;
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+    .progress-line {
+        flex: 1;
+        height: 1px;
+        background: #D8D2C5;
+        margin: 0 4px;
+    }
+    .progress-eyebrow {
+        text-align: center;
+        font-size: 10px;
+        letter-spacing: 0.4em;
+        color: #1E3A8A;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    /* ====== フッター・サイン ====== */
+    .footer-mark {
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid #D8D2C5;
+        text-align: center;
+        font-family: "Playfair Display", serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        color: #0F0F0F;
+    }
+    .footer-sub {
+        font-family: "Inter", sans-serif;
+        font-size: 9px;
+        letter-spacing: 0.35em;
+        color: #6B6B6B;
+        font-weight: 500;
+        text-transform: uppercase;
+        margin-top: 6px;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+# --- ブランドバー（最上段） ---
+st.markdown("""
+<div class="brand-bar">
+    <div class="brand-mark">EIGHT MEN</div>
+    <div class="brand-tag">Style · Cut · Life</div>
+</div>
+""", unsafe_allow_html=True)
 
 # --- 📥 データ読み込み ---
 @st.cache_data(ttl=600)
@@ -314,18 +407,10 @@ st.markdown(f"""
         color: #0F0F0F;
     '>{selected_store_name}</h3>
     <div style='
-        font-size: 10px;
-        letter-spacing: 0.45em;
-        color: #6B6B6B;
-        font-weight: 500;
-        text-transform: uppercase;
-        margin-top: 12px;
-    '>Style · Cut · Life</div>
-    <div style='
         width: 48px;
         height: 1px;
         background: #0F0F0F;
-        margin: 18px auto 4px auto;
+        margin: 22px auto 4px auto;
     '></div>
 </div>
 """, unsafe_allow_html=True)
@@ -343,7 +428,22 @@ st.divider()
 # --- AIにお任せ ---
 st.markdown("#### AIにお任せする方はこちら")
 st.markdown("<p style='color: #666; font-size: 13px; letter-spacing: 0.03em; margin-top: -8px;'>簡単な質問に答えるだけで、下書きを作成します。</p>", unsafe_allow_html=True)
-st.write("")
+
+# --- ステップ・プログレス ---
+st.markdown("""
+<div class="progress-eyebrow">5 Steps</div>
+<div class="progress-wrap">
+    <div class="progress-step">1</div>
+    <div class="progress-line"></div>
+    <div class="progress-step">2</div>
+    <div class="progress-line"></div>
+    <div class="progress-step">3</div>
+    <div class="progress-line"></div>
+    <div class="progress-step">4</div>
+    <div class="progress-line"></div>
+    <div class="progress-step">5</div>
+</div>
+""", unsafe_allow_html=True)
 
 # --- 📝 入力フォーム ---
 st.markdown('<span class="step-label"><span class="step-number">01</span>担当スタッフ</span>', unsafe_allow_html=True)
@@ -478,3 +578,11 @@ if submit_button:
 
         except Exception as e:
             st.error("エラーが発生しました。APIキーを確認してください。")
+
+# --- フッター・サイン ---
+st.markdown("""
+<div class="footer-mark">
+    EIGHT MEN
+    <div class="footer-sub">Be Your Style · Be Your Voice</div>
+</div>
+""", unsafe_allow_html=True)
