@@ -66,7 +66,6 @@ ATMOSPHERE_LIST = [
     "技術・仕上がり",
     "カウンセリング",
     "店内の雰囲気",
-    "清潔感",
     "価格の満足度",
     "その他"
 ]
@@ -77,7 +76,6 @@ _ATM_SVG = {
     "技術・仕上がり": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg>',
     "カウンセリング": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     "店内の雰囲気": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>',
-    "清潔感": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8L4 11l5.8 1.9L12 18l1.9-5.8L20 11l-5.8-1.9z"/><path d="M18 18l-.7 1.9L15.4 21l1.9.7L18 23l.7-1.9L20.6 21l-1.9-.7z"/></svg>',
     "価格の満足度": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4 3-4M9 13h6M9 16h6M12 12v6"/></svg>',
     "その他": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="#0F0F0F"/><circle cx="12" cy="12" r="1" fill="#0F0F0F"/><circle cx="16" cy="12" r="1" fill="#0F0F0F"/></svg>',
 }
@@ -122,9 +120,7 @@ ATMOSPHERE_SUBOPTIONS = {
         "高級感がある",
         "プライベート感",
         "BGMが心地よい",
-    ],
-    "清潔感": [
-        "店内全体が清潔",
+        "店内が清潔",
         "シャンプー台がきれい",
         "道具・タオルが衛生的",
         "鏡周りが整頓",
@@ -424,22 +420,25 @@ st.markdown("""
         letter-spacing: 0.02em !important;
     }
 
-    /* ====== カード内サブピル（タップで展開） ====== */
-    div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="button-group"] {
-        padding: 0 10px 10px 10px !important;
-        margin-top: -4px !important;
-        flex-wrap: wrap !important;
-        gap: 4px !important;
-        cursor: default !important;
+    /* ====== サブ選択肢セクション（グリッド下） ====== */
+    .sub-section-label {
+        font-family: "Playfair Display", "Noto Serif JP", serif;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #0F0F0F;
+        margin: 24px 0 16px 0;
+        padding-top: 18px;
+        border-top: 1px solid #D8D2C5;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="button-group"] button {
-        font-size: 11px !important;
-        padding: 4px 10px !important;
-        min-height: 26px !important;
-        border-radius: 2px !important;
-        letter-spacing: 0.02em !important;
+    .sub-category-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #1E3A8A;
+        margin: 14px 0 8px 0;
+        letter-spacing: 0.06em;
     }
-    /* カード内サブピル選択時はコバルト塗り（外側ルールを継承） */
     /* カード内のSVGアイコン（markdown image）のサイズ・整列 */
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] img {
         width: 18px !important;
@@ -676,25 +675,29 @@ st.write("")
 st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数選択可）<span class="required-badge">必須</span></span>', unsafe_allow_html=True)
 
 atmospheres = []
-atmosphere_subdetails = {}
 with st.container(key="atm_grid"):
     for item in ATMOSPHERE_LIST:
         with st.container(border=True):
-            checked = st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}")
-            if checked:
+            if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
                 atmospheres.append(item)
-                subs_pool = ATMOSPHERE_SUBOPTIONS.get(item, [])
-                if subs_pool:
-                    selected_subs = st.pills(
-                        f"{item}_詳細",
-                        subs_pool,
-                        selection_mode="multi",
-                        default=[],
-                        key=f"atm_sub_{item}",
-                        label_visibility="collapsed",
-                    )
-                    if selected_subs:
-                        atmosphere_subdetails[item] = selected_subs
+
+# --- グリッド下にサブ選択肢セクション ---
+atmosphere_subdetails = {}
+checked_with_subs = [a for a in atmospheres if ATMOSPHERE_SUBOPTIONS.get(a)]
+if checked_with_subs:
+    st.markdown('<div class="sub-section-label">さらに詳しく（任意・複数可）</div>', unsafe_allow_html=True)
+    for atm in checked_with_subs:
+        st.markdown(f'<div class="sub-category-label">{atm}</div>', unsafe_allow_html=True)
+        sel = st.pills(
+            f"{atm}_詳細",
+            ATMOSPHERE_SUBOPTIONS[atm],
+            selection_mode="multi",
+            default=[],
+            key=f"atm_sub_{atm}",
+            label_visibility="collapsed",
+        )
+        if sel:
+            atmosphere_subdetails[atm] = sel
 
 atmosphere_detail = ""
 if atmospheres and "その他" in atmospheres:
