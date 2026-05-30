@@ -88,6 +88,58 @@ def _svg_to_md_img(svg: str) -> str:
 
 ATMOSPHERE_ICONS = {k: _svg_to_md_img(v) for k, v in _ATM_SVG.items()}
 
+# 良かった点 サブ選択肢（MEO/SEOキーワード強化用）
+ATMOSPHERE_SUBOPTIONS = {
+    "接客・対応": [
+        "笑顔の挨拶",
+        "気遣いが細やか",
+        "距離感が心地よい",
+        "親しみやすい",
+        "礼儀正しく丁寧",
+        "会話量がちょうど良い",
+    ],
+    "技術・仕上がり": [
+        "想像以上の仕上がり",
+        "イメチェンが叶った",
+        "クセを上手に抑えてくれた",
+        "セットしやすい",
+        "顔型に合った提案",
+        "ダメージを抑えた施術",
+        "持ちが良い",
+    ],
+    "カウンセリング": [
+        "じっくり要望を聞いてくれた",
+        "写真を見ながら相談できた",
+        "プロ目線の提案",
+        "似合う髪型を一緒に検討",
+        "ライフスタイルに合った提案",
+        "アフターケアの説明",
+    ],
+    "店内の雰囲気": [
+        "明るく賑やか",
+        "落ち着いた空間",
+        "お洒落な内装",
+        "高級感がある",
+        "プライベート感",
+        "BGMが心地よい",
+    ],
+    "清潔感": [
+        "店内全体が清潔",
+        "シャンプー台がきれい",
+        "道具・タオルが衛生的",
+        "鏡周りが整頓",
+        "消毒が行き届いている",
+    ],
+    "価格の満足度": [
+        "コスパが良い",
+        "仕上がりに対して適正",
+        "メンズ価格が良心的",
+        "メニュー料金が明朗",
+        "クーポンがお得",
+        "リピートしやすい価格",
+    ],
+}
+
 # --- 🎨 ページ設定 & デザイン ---
 st.set_page_config(page_title="GUEST REVIEW", layout="centered")
 
@@ -337,8 +389,7 @@ st.markdown("""
     }
 
     /* ====== チェックボックス・カード（良かった点） ====== */
-    /* カード全体をクリック可能にするため、padding を 0 にして
-       内部 label をカード全域に拡張する */
+    /* カード全体クリック可能 + チェック時にサブピル展開対応 */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         border: 1px solid #D8D2C5 !important;
         border-radius: 2px !important;
@@ -346,27 +397,25 @@ st.markdown("""
         padding: 0 !important;
         margin-bottom: 10px !important;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        min-height: 68px !important;
+        min-height: 60px !important;
         cursor: pointer !important;
-        overflow: hidden !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"] > div,
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"],
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] {
         width: 100% !important;
-        height: 100% !important;
         margin: 0 !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
         border-color: #0F0F0F !important;
         box-shadow: 0 2px 8px rgba(15, 15, 15, 0.06);
     }
-    /* labelをカード全域に拡張＝カード全体がクリック判定 */
+    /* labelをカード上部全域に拡張＝チェックの上半分はカード全体クリックで反応 */
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] label {
         display: flex !important;
         align-items: center !important;
         width: 100% !important;
-        min-height: 68px !important;
+        min-height: 60px !important;
         padding: 10px 12px !important;
         margin: 0 !important;
         cursor: pointer !important;
@@ -374,6 +423,23 @@ st.markdown("""
         font-size: 13px !important;
         letter-spacing: 0.02em !important;
     }
+
+    /* ====== カード内サブピル（タップで展開） ====== */
+    div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="button-group"] {
+        padding: 0 10px 10px 10px !important;
+        margin-top: -4px !important;
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+        cursor: default !important;
+    }
+    div[data-testid="stVerticalBlockBorderWrapper"] div[data-baseweb="button-group"] button {
+        font-size: 11px !important;
+        padding: 4px 10px !important;
+        min-height: 26px !important;
+        border-radius: 2px !important;
+        letter-spacing: 0.02em !important;
+    }
+    /* カード内サブピル選択時はコバルト塗り（外側ルールを継承） */
     /* カード内のSVGアイコン（markdown image）のサイズ・整列 */
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] img {
         width: 18px !important;
@@ -610,11 +676,25 @@ st.write("")
 st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数選択可）<span class="required-badge">必須</span></span>', unsafe_allow_html=True)
 
 atmospheres = []
+atmosphere_subdetails = {}
 with st.container(key="atm_grid"):
     for item in ATMOSPHERE_LIST:
         with st.container(border=True):
-            if st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}"):
+            checked = st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}")
+            if checked:
                 atmospheres.append(item)
+                subs_pool = ATMOSPHERE_SUBOPTIONS.get(item, [])
+                if subs_pool:
+                    selected_subs = st.pills(
+                        f"{item}_詳細",
+                        subs_pool,
+                        selection_mode="multi",
+                        default=[],
+                        key=f"atm_sub_{item}",
+                        label_visibility="collapsed",
+                    )
+                    if selected_subs:
+                        atmosphere_subdetails[item] = selected_subs
 
 atmosphere_detail = ""
 if atmospheres and "その他" in atmospheres:
@@ -645,9 +725,15 @@ if submit_button:
             motivation_text_parts.append(motivation_detail)
         motivation_final_text = "、".join(motivation_text_parts) if motivation_text_parts else "特になし"
 
-        # 雰囲気の処理
+        # 良かった点の処理（カテゴリ + サブ詳細を組み合わせる）
         clean_atmospheres = [a for a in atmospheres if a != "その他"] if atmospheres else []
-        atmosphere_text_parts = clean_atmospheres.copy()
+        atmosphere_text_parts = []
+        for atm in clean_atmospheres:
+            subs = atmosphere_subdetails.get(atm, [])
+            if subs:
+                atmosphere_text_parts.append(f"{atm}（{'、'.join(subs)}）")
+            else:
+                atmosphere_text_parts.append(atm)
         if atmosphere_detail:
             atmosphere_text_parts.append(atmosphere_detail)
         atmosphere_final_text = "、".join(atmosphere_text_parts) if atmosphere_text_parts else "良かった"
@@ -662,7 +748,7 @@ if submit_button:
         2. 【美容室としての文脈を厳守】お客様は「髪を切る」ために来ています。「静かにリラックスできた」という情報を「作業に集中できた」「勉強が捗る」などカフェやコワーキングスペースのように勘違いして書くのは絶対に禁止。「落ち着いて過ごせた」「シャンプーでウトウトしてしまった」「タブレットで動画を見てくつろげた」など、美容室として100%自然な感想に変換すること。
         3. 「担当：{staff_name}」「メニュー：{menu_text}」のような箇条書きは禁止。「{staff_last_name}さんに{menu_text}をお願いして〜」と文脈に溶け込ませる。
         4. 来店動機・悩み「{motivation_final_text}」について、どう解決したか（ベネフィット）を書く。
-        5. 雰囲気・感想「{atmosphere_final_text}」を反映させる。
+        5. 【良かった点とその詳細】「{atmosphere_final_text}」を反映させる。カッコ内の詳細キーワード（例：明るく賑やか／コスパが良い／シャンプー台がきれい等）は、そのままコピペせず文脈に自然に溶け込ませる。ただし2〜3個の具体ワードは必ず本文に含めること（MEO観点：抽象的な感想だけでは検索評価が弱いため、具体的な体験ワードが必要）。
         6. 今回の来店回数は「{visit_count}」です。初回なら「初めての利用」という背景を、2回目以降なら「リピートしている」ニュアンスを自然に含める。
         7. 【禁止ワード】AI特有の不自然な表現（「プロフェッショナルな」「至福のひととき」「まるで〜のようです」「大変満足しております」「強くお勧めします」）は絶対に使わない。
         8. 【文体】スマホでサクッと書いたような、少しラフでリアルな口語体（「〜でよかったです！」「〜してもらいました」「最高です」「また行きます」など）にする。
