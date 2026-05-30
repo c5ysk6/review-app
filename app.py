@@ -121,10 +121,6 @@ ATMOSPHERE_SUBOPTIONS = {
         "プライベート感",
         "BGMが心地よい",
         "店内が清潔",
-        "シャンプー台がきれい",
-        "道具・タオルが衛生的",
-        "鏡周りが整頓",
-        "消毒が行き届いている",
     ],
     "価格の満足度": [
         "コスパが良い",
@@ -465,6 +461,12 @@ st.markdown("""
         padding: 8px 14px 4px 14px !important;
         border-left: 2px solid #1E3A8A !important;
         background: rgba(30, 58, 138, 0.04) !important;
+    }
+    /* サブ選択肢ピルを左詰めに揃える */
+    .st-key-atm_grid [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] {
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
     }
 
     /* ====== ステップ3（メニュー）等のスマホ折り返し ====== */
