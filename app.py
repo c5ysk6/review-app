@@ -67,7 +67,6 @@ ATMOSPHERE_LIST = [
     "カウンセリング",
     "店内の雰囲気",
     "清潔感",
-    "予約のしやすさ",
     "価格の満足度",
     "その他"
 ]
@@ -79,7 +78,6 @@ _ATM_SVG = {
     "カウンセリング": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     "店内の雰囲気": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>',
     "清潔感": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8L4 11l5.8 1.9L12 18l1.9-5.8L20 11l-5.8-1.9z"/><path d="M18 18l-.7 1.9L15.4 21l1.9.7L18 23l.7-1.9L20.6 21l-1.9-.7z"/></svg>',
-    "予約のしやすさ": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>',
     "価格の満足度": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4 3-4M9 13h6M9 16h6M12 12v6"/></svg>',
     "その他": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="#0F0F0F"/><circle cx="12" cy="12" r="1" fill="#0F0F0F"/><circle cx="16" cy="12" r="1" fill="#0F0F0F"/></svg>',
 }
@@ -339,25 +337,40 @@ st.markdown("""
     }
 
     /* ====== チェックボックス・カード（良かった点） ====== */
+    /* カード全体をクリック可能にするため、padding を 0 にして
+       内部 label をカード全域に拡張する */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         border: 1px solid #D8D2C5 !important;
         border-radius: 2px !important;
         background: #FFFFFF !important;
-        padding: 10px 12px !important;
+        padding: 0 !important;
         margin-bottom: 10px !important;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
         min-height: 68px !important;
-        display: flex !important;
-        align-items: center !important;
+        cursor: pointer !important;
+        overflow: hidden !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"] > div {
+    div[data-testid="stVerticalBlockBorderWrapper"] > div,
+    div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"],
+    div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] {
         width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
         border-color: #0F0F0F !important;
         box-shadow: 0 2px 8px rgba(15, 15, 15, 0.06);
     }
+    /* labelをカード全域に拡張＝カード全体がクリック判定 */
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] label {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        min-height: 68px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        box-sizing: border-box !important;
         font-size: 13px !important;
         letter-spacing: 0.02em !important;
     }
