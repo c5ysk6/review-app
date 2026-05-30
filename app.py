@@ -435,15 +435,17 @@ st.markdown("""
     }
 
     /* ====== ステップ5：CSS Grid + dense flow ====== */
-    /* デスクトップ3列・スマホ2列。サブ選択肢は該当カード直下に全幅で挿入 */
-    .st-key-atm_grid [data-testid="stVerticalBlock"] {
+    /* デスクトップ3列・スマホ2列。サブ選択肢は該当カード直下に全幅で挿入。
+       重要：.st-key-atm_grid を直接ターゲット（descendant指定にすると
+       サブコンテナ自身もstVerticalBlockなのでgrid化されてしまう） */
+    .st-key-atm_grid {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
         grid-auto-flow: dense !important;
         gap: 10px !important;
     }
     @media (max-width: 640px) {
-        .st-key-atm_grid [data-testid="stVerticalBlock"] {
+        .st-key-atm_grid {
             grid-template-columns: repeat(2, 1fr) !important;
         }
     }
@@ -452,20 +454,9 @@ st.markdown("""
         margin-bottom: 0 !important;
     }
 
-    /* ネスト内部のstVerticalBlockはgridを継承させない（block戻し）
-       これがないとサブコンテナ内のピル親まで3列gridになり、
-       ピルが1/3幅セルに押し込まれて縦並びに見える */
-    .st-key-atm_grid [class*="st-key-atm_subs_"] [data-testid="stVerticalBlock"],
-    .st-key-atm_grid [data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"] {
-        display: block !important;
-        grid-template-columns: none !important;
-        grid-auto-flow: initial !important;
-        gap: 0 !important;
-    }
-
-    /* サブ選択肢コンテナ（チェック中カードの直下、全幅） */
-    .st-key-atm_grid [data-testid="stElementContainer"]:has([class*="st-key-atm_subs_"]),
-    .st-key-atm_grid > [data-testid="stVerticalBlock"] > [class*="st-key-atm_subs_"] {
+    /* サブコンテナ（grid item）を全幅spanさせる：
+       grid直下のstElementContainer内にst-key-atm_subs_X要素があるものを対象 */
+    .st-key-atm_grid > [data-testid="stElementContainer"]:has([class*="st-key-atm_subs_"]) {
         grid-column: 1 / -1 !important;
     }
     .st-key-atm_grid [class*="st-key-atm_subs_"] {
