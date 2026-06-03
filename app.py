@@ -3,6 +3,35 @@ import streamlit as st
 from openai import OpenAI
 import pandas as pd
 
+
+# ====== Supabase クライアント（任意・失敗時は保存スキップ） ======
+@st.cache_resource
+def _get_supabase_client():
+    """Supabaseクライアントを返す。secrets未設定・パッケージ未インストール時はNone。"""
+    try:
+        url = st.secrets["SUPABASE_URL"]
+        key = st.secrets["SUPABASE_KEY"]
+    except (KeyError, FileNotFoundError):
+        return None
+    try:
+        from supabase import create_client
+        return create_client(url, key)
+    except Exception:
+        return None
+
+
+def save_review_log(payload: dict) -> tuple[bool, str | None]:
+    """review_logs テーブルに1件保存。成功=(True, None) / 失敗=(False, エラー文)。"""
+    client = _get_supabase_client()
+    if client is None:
+        return False, "Supabase未設定"
+    try:
+        client.table("review_logs").insert(payload).execute()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+
+
 # --- ⚙️ 設定エリア ---
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
 
@@ -785,7 +814,33 @@ if submit_button:
 
             st.success("✅ 作成完了！枠の右上にあるアイコン（📋）から1タップでコピーできます！")
             st.code(review_text, language="text", wrap_lines=True)
-            
+
+            # ====== Supabase 保存（失敗してもアプリは続行） ======
+            satisfaction_points_flat = []
+            for atm in clean_atmospheres:
+                subs = atmosphere_subdetails.get(atm, [])
+                if subs:
+                    for s in subs:
+                        satisfaction_points_flat.append(f"{atm}:{s}")
+                else:
+                    satisfaction_points_flat.append(atm)
+            if atmosphere_detail:
+                satisfaction_points_flat.append(f"その他:{atmosphere_detail}")
+
+            log_payload = {
+                "store_name": selected_store_name,
+                "staff_name": staff_name,
+                "menu": menu_text,
+                "visit_reason": motivation_final_text,
+                "satisfaction_points": satisfaction_points_flat,
+                "review_tone": [],
+                "generated_review": review_text,
+                "copied": False,
+            }
+            ok, err = save_review_log(log_payload)
+            if not ok and err and err != "Supabase未設定":
+                st.warning(f"保存に失敗しましたが、口コミ生成は完了しています。（{err}）")
+
             st.markdown(f"""<a href="{selected_store_link}" target="_blank" style="text-decoration: none;"><button style="width: 100%; background: #1E3A8A; color: #FFFFFF; padding: 20px; border: none; border-radius: 2px; font-weight: 600; margin-top: 16px; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);">Googleマップを開いて投稿する</button></a>""", unsafe_allow_html=True)
 
         except Exception as e:
