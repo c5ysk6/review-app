@@ -9,6 +9,47 @@ import pandas as pd
 import streamlit as st
 
 st.set_page_config(page_title="GUEST REVIEW · Dashboard", layout="wide")
+
+# サイドバー（pages一覧リンク）を非表示にする
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebarNav"] { display: none !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# ====== パスワード認証 ======
+def _password_gate():
+    expected = st.secrets.get("DASHBOARD_PASSWORD") if hasattr(st.secrets, "get") else None
+    if not expected:
+        try:
+            expected = st.secrets["DASHBOARD_PASSWORD"]
+        except (KeyError, FileNotFoundError):
+            expected = None
+    if not expected:
+        st.error("DASHBOARD_PASSWORD が secrets に設定されていません。管理者に連絡してください。")
+        st.stop()
+
+    if st.session_state.get("dashboard_unlocked"):
+        return
+
+    st.title("Guest Review Dashboard")
+    st.caption("閲覧にはパスワードが必要です")
+    pwd = st.text_input("パスワード", type="password", key="_dash_pwd")
+    if st.button("ログイン", type="primary"):
+        if pwd == expected:
+            st.session_state["dashboard_unlocked"] = True
+            st.rerun()
+        else:
+            st.error("パスワードが違います")
+    st.stop()
+
+
+_password_gate()
+
 st.title("Guest Review Dashboard")
 st.caption("review_logs の集計ビュー")
 

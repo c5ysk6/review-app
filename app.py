@@ -168,6 +168,10 @@ st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
+    /* サイドバーのページナビ（dashboardへのリンク）を非表示にする
+       お客さん向けの画面でDashboardが見えないようにする目的 */
+    [data-testid="stSidebarNav"] { display: none !important; }
+
     /* ベース：クリーム背景＋エディトリアル */
     html, body, [class*="css"] {
         font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
