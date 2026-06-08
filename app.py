@@ -738,7 +738,7 @@ if motivations and "その他" in motivations:
     )
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数選択可）<span class="required-badge">必須</span></span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数可）</span>', unsafe_allow_html=True)
 
 atmospheres = []
 atmosphere_subdetails = {}
