@@ -1,6 +1,8 @@
 import base64
+import html as html_mod
 import random
 import streamlit as st
+import streamlit.components.v1 as components
 from openai import OpenAI
 import pandas as pd
 
@@ -836,8 +838,85 @@ if submit_button:
                 )
                 review_text = response.choices[0].message.content
 
-            st.success("✅ 作成完了！枠の右上にあるアイコン（📋）から1タップでコピーできます！")
-            st.code(review_text, language="text", wrap_lines=True)
+            escaped_review = html_mod.escape(review_text)
+            approx_lines = max(4, len(review_text) // 38 + 1)
+            component_height = approx_lines * 28 + 180
+            components.html(f"""
+<style>
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{
+    font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: transparent;
+    letter-spacing: 0.02em;
+  }}
+  .review-card {{
+    background: #FFFFFF;
+    border: 1px solid #D8D2C5;
+    border-radius: 2px;
+    padding: 20px;
+  }}
+  .review-label {{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: #1E3A8A;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }}
+  .review-text {{
+    font-size: 14px;
+    line-height: 1.85;
+    color: #0F0F0F;
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+  }}
+  .copy-btn {{
+    width: 100%;
+    padding: 18px;
+    background: #D97706;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 2px;
+    font-family: "Inter", "Noto Sans JP", -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+  }}
+  .copy-btn:hover {{
+    background: #B45309;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(217, 119, 6, 0.45);
+  }}
+  .copy-btn:active {{ transform: translateY(0); }}
+  .copy-btn.copied {{
+    background: #16A34A;
+    box-shadow: 0 6px 18px rgba(22, 163, 74, 0.3);
+    letter-spacing: 0.2em;
+  }}
+</style>
+<div class="review-card">
+  <div class="review-label">Generated Review</div>
+  <div class="review-text" id="review-text">{escaped_review}</div>
+  <button class="copy-btn" id="copy-btn" onclick="copyReview()">📋 口コミをコピーする</button>
+</div>
+<script>
+  function copyReview() {{
+    const text = document.getElementById('review-text').innerText;
+    const btn = document.getElementById('copy-btn');
+    navigator.clipboard.writeText(text).then(() => {{
+      btn.textContent = '✓ コピーしました！';
+      btn.classList.add('copied');
+      setTimeout(() => {{
+        btn.textContent = '📋 口コミをコピーする';
+        btn.classList.remove('copied');
+      }}, 3000);
+    }});
+  }}
+</script>
+""", height=component_height)
 
             # ====== Supabase 保存（失敗してもアプリは続行） ======
             satisfaction_points_flat = []
