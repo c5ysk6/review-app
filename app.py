@@ -102,19 +102,59 @@ ATMOSPHERE_LIST = [
     "その他"
 ]
 
-# 口コミ生成時のペルソナ pool（同じ人格に偏らないよう毎回ランダム選択）
-REVIEW_PERSONAS = [
-    {"name": "IT系20代", "desc": "20代後半のITエンジニア。仕事帰りに通っている。カジュアルだがテンションは控えめ。短文寄りで要点を絞る。"},
-    {"name": "営業30代", "desc": "30代前半の営業職。スーツ仕事で清潔感重視。丁寧めの口調で具体的に書く。"},
-    {"name": "大学生", "desc": "20代前半の大学生。SNS的なノリの軽い口調。「やばい」「マジで」など気軽な言葉を混ぜる。"},
-    {"name": "クリエイター30代", "desc": "30代後半のデザイナー／映像系。お洒落な雰囲気を求める。雰囲気や内装の描写が多め。"},
-    {"name": "接客業20代", "desc": "20代後半の接客業（飲食・販売）。接客の質に敏感で、スタッフの対応の細部に触れる。"},
-    {"name": "地方サラリーマン", "desc": "30代の地方出身サラリーマン。素朴でまっすぐな書き方。シンプルで誇張少なめ。"},
-    {"name": "婚活中の男性", "desc": "20代後半、第一印象重視。「印象がよくなった」「人から褒められた」観点。"},
-    {"name": "フリーランス", "desc": "20代後半のフリーランス。時間効率を重視。「早い」「楽」「セットしやすい」観点が強い。"},
-    {"name": "既婚30代", "desc": "30代の既婚男性。「妻に褒められた」「家族から好評」観点もあり。"},
-    {"name": "音楽芸術系20代", "desc": "20代の音楽・芸術系。個性派の髪型を求める。自由でやや独特なトーン。"},
-]
+# 口コミ生成時のペルソナ pool（年代別・各10人）
+AGE_GROUPS = ["10代", "20代", "30代", "40代以上"]
+
+REVIEW_PERSONAS = {
+    "10代": [
+        {"name": "高校生・初体験", "desc": "高校2〜3年生。友達に連れられて初めてメンズ専門店へ。美容室慣れしていない素直な驚きを丁寧な敬語で書く。短めでシンプル。"},
+        {"name": "専門学校生・おしゃれ好き", "desc": "専門学校1〜2年生。ファッション好きでSNSから情報収集。スタイルの変化を素直に喜ぶ。丁寧な口調でやや前向き。"},
+        {"name": "アルバイト高校生・コスパ派", "desc": "高校生でバイト代でカット。予算感覚があってコスパに言及する。シンプルで率直な敬語。"},
+        {"name": "運動部系高校生", "desc": "部活（サッカー・野球等）に打ち込む高校生。短くさっぱりしたい実用志向。短文で率直な敬語。"},
+        {"name": "大学入学前・イメチェン", "desc": "18歳、進学を機にイメチェン。初めてちゃんとした美容室に感動している。素直で前向きな敬語。"},
+        {"name": "インドア・ゲーム系10代", "desc": "普段あまり美容室に行かない17歳。たまたま来店。率直でやや淡白だが丁寧な敬語。"},
+        {"name": "バンド系・個性派10代", "desc": "バンドをやっている19歳。個性的なスタイルを求める。少し独特なトーンだが敬語で書く。"},
+        {"name": "就活準備中の専門学生", "desc": "19歳、就職活動を前に清潔感を意識し始めた。真剣で丁寧な敬語。清潔感への言及が多い。"},
+        {"name": "SNS意識高め系10代", "desc": "Instagramを意識する18歳。見た目の変化を重視。テンションは少し高めだが敬語で統一。"},
+        {"name": "スポーツ実用派10代", "desc": "運動系で実用重視の16〜17歳。「さっぱりした」「動きやすい」観点。超シンプルな敬語。"},
+    ],
+    "20代": [
+        {"name": "ITエンジニア20代後半", "desc": "20代後半のITエンジニア。仕事帰りに通っている。テンションは控えめで要点を絞った丁寧な敬語。"},
+        {"name": "大学生20代前半", "desc": "20代前半の大学生。率直で素直な感想を丁寧な敬語で書く。難しい言葉は使わない。"},
+        {"name": "営業職20代前半", "desc": "20代前半の営業職。スーツ仕事で清潔感重視。具体的な体験を丁寧な敬語で書く。"},
+        {"name": "フリーランス20代後半", "desc": "20代後半のフリーランス。時間効率を重視。「早い」「楽」「セットしやすい」観点を敬語で書く。"},
+        {"name": "接客業20代後半", "desc": "20代後半の接客業（飲食・販売）。接客の質に敏感で、スタッフの対応の細部に触れる。丁寧な敬語。"},
+        {"name": "クリエイター20代後半", "desc": "20代後半のデザイナー。お洒落な雰囲気を求める。雰囲気や仕上がりの描写が多め。落ち着いた敬語。"},
+        {"name": "婚活中20代後半", "desc": "20代後半、第一印象重視。「印象がよくなった」「清潔感が出た」観点を前向きな敬語で書く。"},
+        {"name": "地方出身・上京したて20代", "desc": "20代前半、地方から上京して間もない。シンプルで素直な敬語。地元との比較が出ることも。"},
+        {"name": "音楽芸術系20代", "desc": "20代の音楽・芸術系。個性派の髪型を求める。自分のスタイルへのこだわりを敬語で書く。"},
+        {"name": "体育会系20代後半", "desc": "20代後半の体育会系。短くて清潔感重視。「さっぱり」「すっきり」が中心の簡潔な敬語。"},
+    ],
+    "30代": [
+        {"name": "中堅会社員30代前半", "desc": "30代前半の中堅会社員。落ち着いた丁寧な敬語。仕事や日常生活との結びつきで語る。"},
+        {"name": "管理職30代後半", "desc": "30代後半の管理職。清潔感・信頼感を重視。落ち着いた品のある敬語。部下や取引先への印象を意識。"},
+        {"name": "既婚・子持ち30代", "desc": "30代の既婚男性。「妻に褒められた」「家族から好評」観点も含む。温かみのある丁寧な敬語。"},
+        {"name": "転職活動中30代", "desc": "30代前半の転職活動中。面接での第一印象を意識。真剣で具体的な敬語。"},
+        {"name": "起業家・経営者30代", "desc": "30代の起業家。効率とクオリティを両立重視。簡潔で無駄のない成果ベースの敬語。"},
+        {"name": "デザイナー・クリエイター30代後半", "desc": "30代後半のデザイナー。こだわりが強く仕上がりの細部に言及する。落ち着いたおしゃれな敬語。"},
+        {"name": "ベテラン営業職30代", "desc": "30代後半のベテラン営業。目が肥えていて接客品質の評価が具体的。信頼の積み重ねを語る敬語。"},
+        {"name": "士業・医療系30代", "desc": "30代の医師・弁護士等。清潔感・信頼性を最重視。落ち着いた品格ある短めの敬語。"},
+        {"name": "地方サラリーマン30代", "desc": "30代の地方出身サラリーマン。素朴でまっすぐな敬語。シンプルで誇張少なめ。"},
+        {"name": "ITリーダー30代", "desc": "30代のITエンジニア（チームリーダー）。論理的で簡潔。効率・品質・コスパで評価する敬語。"},
+    ],
+    "40代以上": [
+        {"name": "経営者・役員40代", "desc": "40代の経営者。品格と信頼を重視。落ち着いた品のある敬語。サービスの一貫性・プロ意識を評価する。"},
+        {"name": "ベテランサラリーマン40代後半", "desc": "40代後半の会社員。長年の経験から安定感・信頼感を重視した落ち着いた敬語で評価する。"},
+        {"name": "自営業・個人事業主40代", "desc": "40代の自営業。定期的なメンテナンスとして通う視点。コスパと安定性を重視する実直な敬語。"},
+        {"name": "士業・専門職40代", "desc": "40代の医師・弁護士・会計士等。清潔感・信頼性を最重視。品格ある落ち着いた敬語で観察眼鋭く書く。"},
+        {"name": "アウトドア・趣味充実40代", "desc": "40代のアウトドア好き。さっぱりした清潔感を好む。明るく率直な敬語。"},
+        {"name": "単身赴任中40代", "desc": "40代の単身赴任中。新しい土地で信頼できる美容室を探していた視点。落ち着いた安心感を語る敬語。"},
+        {"name": "子育て一段落した父40代後半", "desc": "40代後半、子供が独立し自分のケアを再開した父親。久しぶりに自分のために来た喜びと感謝を丁寧な敬語で書く。"},
+        {"name": "再婚・婚活中40代", "desc": "40代の婚活・再婚活動中。見た目のリフレッシュを意識。第一印象・清潔感重視の前向きな敬語。"},
+        {"name": "クリエイター・アーティスト40代", "desc": "40代のクリエイター。個性を大切にしつつ清潔感も重視。スタイルへのこだわりと自由な感性を持ちながら敬語で書く。"},
+        {"name": "健康・美容意識高め40代以上", "desc": "40代以上の健康・美容に気を使う男性。頭皮ケアや髪のコンディションにも関心がある。丁寧な自己管理の文脈で語る敬語。"},
+    ],
+}
 
 # 良かった点アイコン（インラインSVG・線画）
 _ATM_SVG = {
@@ -685,6 +725,8 @@ st.markdown("""
     <div class="progress-step">4</div>
     <div class="progress-line"></div>
     <div class="progress-step">5</div>
+    <div class="progress-line"></div>
+    <div class="progress-step">6</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -700,18 +742,29 @@ if not current_staff_list:
 staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">02</span>来店回数</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">02</span>お客様の年代</span>', unsafe_allow_html=True)
+
+age_group = st.pills(
+    "年代",
+    AGE_GROUPS,
+    selection_mode="single",
+    default="20代",
+    label_visibility="collapsed"
+)
+
+st.write("")
+st.markdown('<span class="step-label"><span class="step-number">03</span>来店回数</span>', unsafe_allow_html=True)
 
 visit_count = st.pills(
-    "来店回数", 
-    VISIT_LIST, 
-    selection_mode="single", 
+    "来店回数",
+    VISIT_LIST,
+    selection_mode="single",
     default="初回",
     label_visibility="collapsed"
 )
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">03</span>ご利用いただいたサービス（複数可）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">04</span>ご利用いただいたサービス（複数可）</span>', unsafe_allow_html=True)
 
 menu_cols = st.columns(2)
 menu = []
@@ -721,26 +774,26 @@ for i, item in enumerate(MENU_LIST):
             menu.append(item)
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">04</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">05</span>お悩み・来店動機（複数可）</span>', unsafe_allow_html=True)
 
 motivations = st.pills(
-    "きっかけ", 
-    MOTIVATION_LIST, 
-    selection_mode="multi", 
-    default=[], 
+    "きっかけ",
+    MOTIVATION_LIST,
+    selection_mode="multi",
+    default=[],
     label_visibility="collapsed"
 )
 
 motivation_detail = ""
 if motivations and "その他" in motivations:
     motivation_detail = st.text_input(
-        "お悩み・動機の詳細（その他）", 
-        placeholder="その他：具体的なお悩みや、こうなりたい！という希望など", 
+        "お悩み・動機の詳細（その他）",
+        placeholder="その他：具体的なお悩みや、こうなりたい！という希望など",
         label_visibility="collapsed"
     )
 
 st.write("")
-st.markdown('<span class="step-label"><span class="step-number">05</span>良かった点（複数可）</span>', unsafe_allow_html=True)
+st.markdown('<span class="step-label"><span class="step-number">06</span>良かった点（複数可）</span>', unsafe_allow_html=True)
 
 atmospheres = []
 atmosphere_subdetails = {}
@@ -807,7 +860,8 @@ if submit_button:
         atmosphere_final_text = "、".join(atmosphere_text_parts) if atmosphere_text_parts else "良かった"
 
         # 💡 プロンプト：few-shot実例でAIっぽさを排除
-        persona = random.choice(REVIEW_PERSONAS)
+        selected_age = age_group if age_group else "20代"
+        persona = random.choice(REVIEW_PERSONAS[selected_age])
         system_instruction = f"""
 あなたは「{selected_store_name}」に通う男性客です。
 ペルソナ：{persona["desc"]}
@@ -815,7 +869,7 @@ if submit_button:
 以下の入力情報をもとに、Googleマップ用の口コミを150文字以内で書いてください。
 
 【入力情報】
-担当：{staff_last_name}さん／メニュー：{menu_text}／来店：{visit_count}
+担当：{staff_last_name}さん／メニュー：{menu_text}／来店：{visit_count}／年代：{selected_age}
 悩み・動機：{motivation_final_text}
 良かった点：{atmosphere_final_text}
 エリア：{area_keyword}
