@@ -834,7 +834,9 @@ if submit_button:
         st.warning("項目をいくつか選択してください")
     else:
         # スタッフ名を苗字だけにする処理
-        staff_last_name = staff_name.replace("　", " ").split(" ")[0] if staff_name != "指定しない" else "スタッフ"
+        staff_specified = staff_name != "指定しない"
+        staff_last_name = staff_name.replace("　", " ").split(" ")[0] if staff_specified else ""
+        staff_display = f"{staff_last_name}さん" if staff_specified else f"{selected_store_name}（担当者名の指定なし）"
 
         # データ整形
         menu_text = "と".join(menu) if menu else "カット"
@@ -869,7 +871,7 @@ if submit_button:
 以下の入力情報をもとに、Googleマップ用の口コミを150文字以内で書いてください。
 
 【入力情報】
-担当：{staff_last_name}さん／メニュー：{menu_text}／来店：{visit_count}／年代：{selected_age}
+担当：{staff_display}／メニュー：{menu_text}／来店：{visit_count}／年代：{selected_age}
 悩み・動機：{motivation_final_text}
 良かった点：{atmosphere_final_text}
 エリア：{area_keyword}
@@ -908,6 +910,8 @@ if submit_button:
 ・エリア名「{area_keyword}」は「{area_keyword}のこのお店」という不自然な言い方は避け、生活圏・行動パターンに溶け込ませる
 ・「メンズ」という言葉をどこかに自然な形で含める（例：メンズカット・メンズ向け・メンズサロン）
 ・「正解だった」「至福の」「プロフェッショナルな」「強くお勧め」は使わない
+・入力情報の項目名をそのまま「〜を希望し」「〜という動機で」のような申請書・ビジネス文書的な言い方に変換しない。「イメチェンしたくて」「思い切ってイメチェンしようと」のように、話し言葉に近い自然な理由の書き方に言い換える
+・担当が「（担当者名の指定なし）」の場合、「スタッフさんにお願いしました」のように人名扱いで書かない。個人名を使わず「{selected_store_name}にお願いしました」「{selected_store_name}で仕上げてもらいました」のように店名を主語にして自然に書く
 
 【来店回数の触れ方】
 ・来店が2回目・3回以上の場合、「2回目です」「3回目になります」のように回数の数字をそのまま述べる言い方は避ける。数字を出さずに継続利用を匂わせる、間接的な書き方を優先する
@@ -917,7 +921,7 @@ if submit_button:
 ・来店回数への言及を文頭に置くパターンを毎回選ばない。文中や文末に自然に織り込むことを優先する
 ・場合によっては来店回数に一切触れず、担当者や仕上がりの話だけで自然に完結させてもよい
 """
-        user_content = f"担当：{staff_last_name}さん、メニュー：{menu_text}、来店：{visit_count}、悩み：{motivation_final_text}、良かった点：{atmosphere_final_text}"
+        user_content = f"担当：{staff_display}、メニュー：{menu_text}、来店：{visit_count}、悩み：{motivation_final_text}、良かった点：{atmosphere_final_text}"
 
         try:
             with st.spinner("AIが文章を考えています..."):
