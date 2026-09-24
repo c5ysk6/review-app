@@ -46,9 +46,14 @@ STORES = {
     "EIGHT MEN 新宿店": "https://g.page/r/CYky-2vp6Y0REAE/review",
     "EIGHT MEN 上野店": "https://g.page/r/CQh9ZNzN-HMPEAE/review",
     "EIGHT MEN 北千住店": "https://g.page/r/CVCsbonX5vKQEAE/review",
-    "EIGHT MEN 吉祥寺店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
+    "EIGHT MEN 吉祥寺南口店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
     "EIGHT MEN 博多店": "https://g.page/r/Cfs_-7LhTWtDEAE/review",
     "EIGHT MEN 那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
+}
+
+# 改名した店舗の旧名 → 現在名（配布済みQRの ?store= とスタッフ一覧シートの旧名を読み替える）
+RENAMED_STORES = {
+    "吉祥寺店": "吉祥寺南口店",
 }
 
 # エリア名辞書
@@ -59,7 +64,7 @@ STORE_AREAS = {
     "EIGHT MEN 新宿店": "新宿",
     "EIGHT MEN 上野店": "上野",
     "EIGHT MEN 北千住店": "北千住",
-    "EIGHT MEN 吉祥寺店": "吉祥寺",
+    "EIGHT MEN 吉祥寺南口店": "吉祥寺",
     "EIGHT MEN 博多店": "博多",
     "EIGHT MEN 那覇新都心店": "那覇新都心・おもろまち",
 }
@@ -652,6 +657,7 @@ url_store_param = query_params.get("store")
 found_store_name = None
 
 if url_store_param:
+    url_store_param = RENAMED_STORES.get(url_store_param, url_store_param)
     for store_key in STORES.keys():
         if url_store_param in store_key:
             found_store_name = store_key
@@ -735,6 +741,9 @@ st.markdown('<span class="step-label"><span class="step-number">01</span>担当�
 
 csv_store_key = selected_store_name.replace("EIGHT MEN ", "")
 current_staff_list = staff_data_dict.get(csv_store_key, [])
+if not current_staff_list:
+    old_names = [old for old, new in RENAMED_STORES.items() if new == csv_store_key]
+    current_staff_list = staff_data_dict.get(old_names[0], []) if old_names else []
 
 if not current_staff_list:
     current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
