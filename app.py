@@ -551,7 +551,41 @@ st.markdown("""
         display: inline-block !important;
     }
     .st-key-atm_list { gap: 8px !important; }
-    .st-key-atm_list [class*="st-key-atm_card_"] { gap: 0 !important; }
+    /* カード（新しいStreamlitではkey付きコンテナ自身が枠になる）の余白を0にし、
+       チェックボックスのラベルを枠の幅いっぱいまで広げる＝枠内のどこを押しても反応する */
+    .st-key-atm_list [class*="st-key-atm_card_"] {
+        gap: 0 !important;
+        padding: 0 !important;
+        background: var(--surface) !important;
+        border: 1px solid var(--line) !important;
+        border-radius: var(--radius) !important;
+        transition: border-color .15s;
+    }
+    .st-key-atm_list [class*="st-key-atm_card_"]:hover { border-color: var(--accent-line) !important; }
+    .st-key-atm_list [class*="st-key-atm_card_"] > [data-testid="stElementContainer"]:has([data-testid="stCheckbox"]),
+    .st-key-atm_list [class*="st-key-atm_card_"] [data-testid="stCheckbox"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+    .st-key-atm_list [class*="st-key-atm_card_"] [data-testid="stCheckbox"] label {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        min-height: 56px !important;
+        padding: 14px 16px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        cursor: pointer !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+    .st-key-atm_list [class*="st-key-atm_card_"] [data-testid="stCheckbox"] img {
+        width: 18px !important;
+        height: 18px !important;
+        vertical-align: middle !important;
+        margin-right: 4px !important;
+    }
     .st-key-atm_list [class*="st-key-atm_card_"]:has(input[type="checkbox"]:checked),
     .st-key-atm_list [data-testid="stVerticalBlockBorderWrapper"]:has(input[type="checkbox"]:checked) {
         border-color: var(--accent) !important;
@@ -565,7 +599,7 @@ st.markdown("""
     }
     .st-key-atm_list [class*="st-key-atm_subs_"] {
         border-top: 1px solid var(--line) !important;
-        margin: 0 14px !important;
+        margin: 0 16px !important;
         padding: 12px 0 14px 0 !important;
         width: auto !important;
         background: transparent !important;
