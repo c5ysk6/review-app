@@ -37,7 +37,13 @@ def save_review_log(payload: dict) -> tuple[bool, str | None]:
 
 
 # --- ⚙️ 設定エリア ---
-SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmDV5UTQENMNag-AjCx-FLMx7nTo8egWu7kdt5Df-n13Tst-ctf6Ew48MbcMpsTAs844v0Zbfv3gfS/pub?output=csv"
+# スタッフ一覧シート（売上ダッシュボード・日報照合と同じ読み方に統一）
+# 旧「ウェブに公開」URLは 2026-11 に 410 で失効し、スタッフが選べなくなった
+SHEET_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1BvzUNUK8XFv18VrZmGok6YFWMwltj5bQQlSNtx67TU0"
+    "/export?format=csv&gid=0"
+)
 
 # 店舗リスト（EIGHT MEN 〇〇店 に統一）
 STORES = {
@@ -732,7 +738,9 @@ def load_staff_data():
     try:
         df = pd.read_csv(SHEET_URL)
         return df.groupby('店舗名')['スタッフ名'].apply(list).to_dict()
-    except:
+    except Exception as e:
+        # 失敗するとスタッフ選択が「指定しない」だけになる。原因を追えるようサーバーログに残す
+        print(f"[staff] スタッフ一覧の読み込み失敗: {e}")
         return {}
 
 staff_data_dict = load_staff_data()
