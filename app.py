@@ -255,12 +255,12 @@ REVIEW_LENGTHS = [
 
 # 良かった点アイコン（インラインSVG・線画）
 _ATM_SVG = {
-    "接客・対応": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>',
-    "技術・仕上がり": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg>',
-    "カウンセリング": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-    "店内の雰囲気": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>',
-    "価格の満足度": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4 3-4M9 13h6M9 16h6M12 12v6"/></svg>',
-    "その他": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="#0F0F0F"/><circle cx="12" cy="12" r="1" fill="#0F0F0F"/><circle cx="16" cy="12" r="1" fill="#0F0F0F"/></svg>',
+    "接客・対応": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2530" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>',
+    "技術・仕上がり": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2530" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg>',
+    "カウンセリング": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2530" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    "店内の雰囲気": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2530" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>',
+    "価格の満足度": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2530" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4 3-4M9 13h6M9 16h6M12 12v6"/></svg>',
+    "その他": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2530" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="#1a2530"/><circle cx="12" cy="12" r="1" fill="#1a2530"/><circle cx="16" cy="12" r="1" fill="#1a2530"/></svg>',
 }
 
 def _svg_to_md_img(svg: str) -> str:
@@ -320,215 +320,213 @@ st.set_page_config(page_title="GUEST REVIEW", layout="centered")
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+    /* ─────────────────────────────────────────────
+       薄いグレーの地に白いパネル。差し色はティール1色（スタイル自動投稿と同じ配色）。
+       色は --accent と --bg を動かせば全体が連動する
+       ───────────────────────────────────────────── */
+    :root {
+        --accent:      #1d96b4;
+        --bg:          #f4f5f7;
+        --surface:     #ffffff;
+        --ink:         #1a2530;
+        --line:        #e7e9ec;
+        --radius:      10px;
+        --accent-soft: color-mix(in srgb, var(--accent) 9%,  #fff);
+        --accent-line: color-mix(in srgb, var(--accent) 35%, #fff);
+        --accent-dark: color-mix(in srgb, var(--accent) 82%, #000);
+        --line-2:      color-mix(in srgb, var(--ink) 16%, #fff);
+        --ink-2:       color-mix(in srgb, var(--ink) 62%, #fff);
+        --ink-3:       color-mix(in srgb, var(--ink) 40%, #fff);
+        --shadow: 0 1px 2px rgba(16,37,48,.04), 0 6px 20px rgba(16,37,48,.05);
+    }
 
-    /* サイドバーのページナビ（dashboardへのリンク）を非表示にする
-       お客さん向けの画面でDashboardが見えないようにする目的 */
+    /* お客様向け画面にページナビ・標準ヘッダーは出さない */
     [data-testid="stSidebarNav"] { display: none !important; }
+    header[data-testid="stHeader"] { display: none !important; }
 
-    /* ベース：クリーム背景＋エディトリアル */
     html, body, [class*="css"] {
-        font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #0F0F0F;
-        letter-spacing: 0.02em;
+        font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic Medium", "Noto Sans JP", sans-serif;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
     }
-    .stApp {
-        background-color: #F5F1E8;
-    }
+    .stApp { background-color: var(--bg); }
     .block-container {
-        padding-top: 2.5rem;
+        padding-top: 2rem;
         padding-bottom: 3rem;
         max-width: 560px;
     }
 
-    /* 生成ボタン：コバルトブルー */
-    .stButton>button {
-        width: 100%;
-        border-radius: 2px;
-        font-weight: 600;
-        padding: 20px;
-        background: #1E3A8A;
-        color: #FFFFFF;
-        border: none;
-        box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);
-        transition: all 0.25s ease;
-        font-size: 13px;
-        letter-spacing: 0.25em;
-        margin-top: 24px;
-        text-transform: uppercase;
+    /* ====== 店舗ヘッダー ====== */
+    .store-head {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px 20px;
+        text-align: center;
     }
-    .stButton>button:hover {
-        background: #15296B;
-        transform: translateY(-1px);
-        box-shadow: 0 12px 28px rgba(30, 58, 138, 0.35);
+    .store-brand {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .14em;
+        color: var(--accent);
+        margin-bottom: 4px;
     }
-    .stButton>button:active {
-        transform: translateY(0);
+    .store-name {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: clamp(22px, 7vw, 28px) !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
+        letter-spacing: .02em !important;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+        color: var(--ink) !important;
+    }
+    .store-sub {
+        margin-top: 6px;
+        font-size: 12.5px;
+        color: var(--ink-3);
     }
 
-    /* 直行ボタン：黒アウトライン */
+    /* ====== ボタン ====== */
+    /* 生成ボタン：ティール塗り・全幅 */
+    div[data-testid="stElementContainer"]:has(.stButton),
+    .stButton {
+        width: 100% !important;
+    }
+    .stButton>button {
+        width: 100%;
+        border-radius: var(--radius);
+        font-weight: 700;
+        padding: 16px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        box-shadow: none;
+        font-size: 15px;
+        letter-spacing: .04em;
+        margin-top: 20px;
+        transition: background .15s;
+    }
+    .stButton>button:hover { background: var(--accent-dark); color: #fff; }
+    .stButton>button:focus:not(:active) { color: #fff; }
+
+    /* 直行ボタン：白パネル×細枠 */
     .direct-link-btn {
         display: block;
         width: 100%;
         text-align: center;
-        padding: 16px;
-        margin: 24px 0 12px 0;
-        background-color: transparent;
-        color: #0F0F0F;
-        border: 1px solid #0F0F0F;
-        border-radius: 2px;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 12px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        transition: all 0.2s ease;
-    }
-    .direct-link-btn:hover {
-        background-color: #0F0F0F;
-        color: #F5F1E8;
-    }
-
-    /* ステップラベル：番号は円形チップ */
-    .step-label {
-        color: #0F0F0F;
+        padding: 14px;
+        margin: 14px 0 4px 0;
+        background: var(--surface);
+        color: var(--ink) !important;
+        border: 1px solid var(--line-2);
+        border-radius: var(--radius);
+        text-decoration: none !important;
         font-weight: 600;
         font-size: 14px;
-        margin-bottom: 14px;
+        transition: border-color .15s, color .15s;
+    }
+    .direct-link-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent) !important;
+    }
+
+    /* ====== セクション見出し ====== */
+    h4 {
+        color: var(--ink) !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        letter-spacing: .02em !important;
+        margin-top: 4px !important;
+    }
+    p.lead {
+        color: var(--ink-2);
+        font-size: 13px !important;
+        margin-top: -6px;
+    }
+    .step-label {
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
-        letter-spacing: 0.04em;
     }
     .step-number {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: #0F0F0F;
-        color: #F5F1E8;
-        font-family: "Playfair Display", serif;
-        font-weight: 600;
-        font-size: 13px;
-        letter-spacing: 0;
-        margin-right: 12px;
+        min-width: 26px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 6px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 11.5px;
+        font-variant-numeric: tabular-nums;
+        margin-right: 10px;
         line-height: 1;
     }
 
-    /* 見出し：セリフ体エディトリアル */
-    h3 {
-        color: #0F0F0F !important;
-        margin-bottom: 0px !important;
-        font-family: "Playfair Display", "Noto Serif JP", serif !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.02em !important;
-    }
-    h4 {
-        color: #0F0F0F !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.15em !important;
-        margin-top: 12px !important;
-        font-size: 13px !important;
-        text-transform: uppercase !important;
-    }
-
-    /* 入力フィールド */
+    /* ====== 入力 ====== */
     .stTextInput > div > div > input {
-        border-radius: 2px;
-        padding: 14px;
+        border-radius: 8px;
+        padding: 12px;
         font-size: 14px;
-        border: 1px solid #D8D2C5;
-        background-color: #FFFFFF;
-        color: #0F0F0F;
+        background-color: var(--surface);
+        color: var(--ink);
     }
-    .stTextInput > div > div > input:focus {
-        border-color: #1E3A8A;
-        box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.12);
+    .stTextInput > div > div:focus-within {
+        border-color: var(--accent) !important;
     }
-
-    /* セレクトボックス */
     .stSelectbox > div > div {
-        border-radius: 2px;
-        border: 1px solid #D8D2C5;
-        background-color: #FFFFFF;
+        border-radius: 8px;
+        border: 1px solid var(--line-2);
+        background-color: var(--surface);
     }
-    .stSelectbox > div > div:hover {
-        border-color: #0F0F0F;
-    }
+    .stSelectbox > div > div:hover { border-color: var(--accent); }
 
-    /* Pills 共通 */
-    button[data-baseweb="button"] {
-        border-radius: 2px !important;
+    /* Pills */
+    div[data-baseweb="button-group"] button {
+        border-radius: 999px !important;
         font-weight: 500 !important;
-        letter-spacing: 0.04em !important;
     }
-
-    /* Pills 非選択：白×細枠 */
     div[data-baseweb="button-group"] button[aria-pressed="false"] {
-        background-color: #FFFFFF !important;
-        border: 1px solid #D8D2C5 !important;
-        color: #0F0F0F !important;
+        background-color: var(--surface) !important;
+        border: 1px solid var(--line-2) !important;
+        color: var(--ink) !important;
     }
     div[data-baseweb="button-group"] button[aria-pressed="false"]:hover {
-        border-color: #0F0F0F !important;
-        background-color: #FAF7F0 !important;
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
     }
-
-    /* Pills 選択中：コバルト塗り */
     div[data-baseweb="button-group"] button[aria-pressed="true"] {
-        background-color: #1E3A8A !important;
-        border: 1px solid #1E3A8A !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2) !important;
+        background-color: var(--accent-soft) !important;
+        border: 1px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
     }
 
-    /* Divider：細い実線 */
     hr {
         border: none !important;
         height: 1px !important;
-        background: #D8D2C5 !important;
-        margin: 2rem 0 !important;
+        background: var(--line) !important;
+        margin: 1.75rem 0 !important;
     }
 
-    /* 生成された口コミの表示枠 */
-    .stCode {
-        border-radius: 2px;
-        border: 1px solid #D8D2C5;
-        background-color: #FFFFFF !important;
-    }
+    div[data-testid="stAlert"] { border-radius: var(--radius); }
 
-    /* アラート */
-    div[data-testid="stAlert"] {
-        border-radius: 2px;
-        border-left: 3px solid #1E3A8A;
-    }
-
-    /* ====== Streamlit標準ヘッダー（Deploy・メニュー）を非表示 ====== */
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-
-    .progress-eyebrow {
-        text-align: center;
-        font-size: 10px;
-        letter-spacing: 0.4em;
-        color: #1E3A8A;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-    }
-
-    /* ====== チェックボックス・カード（良かった点） ====== */
-    /* カード全体クリック可能 + チェック時にサブピル展開対応 */
+    /* ====== 良かった点：1列カード・詳細はカード内に展開 ====== */
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        border: 1px solid #D8D2C5 !important;
-        border-radius: 2px !important;
-        background: #FFFFFF !important;
+        border: 1px solid var(--line) !important;
+        border-radius: var(--radius) !important;
+        background: var(--surface) !important;
         padding: 0 !important;
-        margin-bottom: 10px !important;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        min-height: 60px !important;
+        margin-bottom: 0 !important;
+        transition: border-color .15s;
         cursor: pointer !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"] > div,
@@ -537,34 +535,19 @@ st.markdown("""
         width: 100% !important;
         margin: 0 !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"]:hover {
-        border-color: #0F0F0F !important;
-        box-shadow: 0 2px 8px rgba(15, 15, 15, 0.06);
-    }
-    /* labelをカード上部全域に拡張＝チェックの上半分はカード全体クリックで反応 */
+    div[data-testid="stVerticalBlockBorderWrapper"]:hover { border-color: var(--accent-line) !important; }
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] label {
         display: flex !important;
         align-items: center !important;
         width: 100% !important;
-        min-height: 60px !important;
-        padding: 10px 12px !important;
+        min-height: 54px !important;
+        padding: 10px 14px !important;
         margin: 0 !important;
         cursor: pointer !important;
         box-sizing: border-box !important;
-        font-size: 13px !important;
-        letter-spacing: 0.02em !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
     }
-
-    /* ====== サブ選択肢カテゴリラベル（カード直下） ====== */
-    .sub-category-label {
-        font-size: 11px;
-        font-weight: 600;
-        color: #1E3A8A;
-        margin: 0 0 8px 0;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-    }
-    /* カード内のSVGアイコン（markdown image）のサイズ・整列 */
     div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCheckbox"] img {
         width: 18px !important;
         height: 18px !important;
@@ -572,30 +555,26 @@ st.markdown("""
         margin-right: 4px !important;
         display: inline-block !important;
     }
-
-    /* ====== ステップ6：1列カード・詳細はカード内に展開 ====== */
-    .st-key-atm_list {
-        gap: 8px !important;
-    }
-    .st-key-atm_list [class*="st-key-atm_card_"] {
-        gap: 0 !important;
-        margin-bottom: 0 !important;
-    }
-    /* チェック済みのカードは枠を濃くして選択状態を明示 */
+    .st-key-atm_list { gap: 8px !important; }
+    .st-key-atm_list [class*="st-key-atm_card_"] { gap: 0 !important; }
     .st-key-atm_list [class*="st-key-atm_card_"]:has(input[type="checkbox"]:checked),
     .st-key-atm_list [data-testid="stVerticalBlockBorderWrapper"]:has(input[type="checkbox"]:checked) {
-        border-color: #1E3A8A !important;
-        box-shadow: inset 3px 0 0 #1E3A8A;
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 1px var(--accent) inset;
     }
-    /* カード内の詳細エリア：区切り線の下にまとめる */
+    .sub-category-label {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--ink-3);
+        margin: 0 0 8px 0;
+    }
     .st-key-atm_list [class*="st-key-atm_subs_"] {
-        border-top: 1px solid #EEE9DF !important;
-        margin: 0 12px !important;
+        border-top: 1px solid var(--line) !important;
+        margin: 0 14px !important;
         padding: 12px 0 14px 0 !important;
         width: auto !important;
         background: transparent !important;
     }
-    /* サブ選択肢ピルを左詰め横並び＋お悩み・来店動機と同じ丸角オーバル形状 */
     .st-key-atm_list [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] {
         display: flex !important;
         flex-direction: row !important;
@@ -605,16 +584,15 @@ st.markdown("""
         width: 100% !important;
     }
     .st-key-atm_list [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] button {
-        border-radius: 999px !important;
-        padding: 8px 18px !important;
-        font-size: 12px !important;
-        min-height: 34px !important;
+        padding: 6px 14px !important;
+        font-size: 12.5px !important;
+        min-height: 32px !important;
         flex: 0 0 auto !important;
         width: auto !important;
         max-width: max-content !important;
     }
 
-    /* ====== ステップ3（メニュー）等のスマホ折り返し ====== */
+    /* ====== メニュー等のスマホ2列折り返し ====== */
     @media (max-width: 640px) {
         [data-testid="stHorizontalBlock"] {
             flex-wrap: wrap !important;
@@ -628,42 +606,30 @@ st.markdown("""
         }
     }
 
-    /* ====== 必須バッジ（黒枠ニュートラル） ====== */
-    .required-badge {
-        display: inline-block;
-        margin-left: 10px;
-        padding: 2px 8px;
-        background: transparent;
-        color: #0F0F0F;
-        border: 1px solid #0F0F0F;
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.15em;
-        border-radius: 2px;
-        vertical-align: middle;
-        line-height: 1.4;
-    }
-
-    /* ====== フッター・サイン ====== */
-    .footer-mark {
-        margin-top: 48px;
-        padding-top: 24px;
-        border-top: 1px solid #D8D2C5;
+    /* ====== 投稿ボタン（生成後） ====== */
+    .post-btn {
+        display: block;
+        width: 100%;
         text-align: center;
-        font-family: "Playfair Display", serif;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.3em;
-        color: #0F0F0F;
+        padding: 16px;
+        margin-top: 12px;
+        background: var(--ink);
+        color: #fff !important;
+        border-radius: var(--radius);
+        text-decoration: none !important;
+        font-weight: 700;
+        font-size: 15px;
     }
-    .footer-sub {
-        font-family: "Inter", sans-serif;
-        font-size: 9px;
-        letter-spacing: 0.35em;
-        color: #6B6B6B;
-        font-weight: 500;
-        text-transform: uppercase;
-        margin-top: 6px;
+    .post-btn:hover { background: #0f1b23; }
+
+    /* ====== フッター ====== */
+    .footer-mark {
+        margin-top: 40px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        text-align: center;
+        font-size: 11.5px;
+        color: var(--ink-3);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -702,39 +668,14 @@ else:
 selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
-# --- 店舗名表示（エディトリアル） ---
+# --- 店舗ヘッダー ---
 # 「EIGHT MEN」は小見出しに分け、大きく出すのは店舗名だけ（長い店名でも省略されないように）
 store_short_name = selected_store_name.replace("EIGHT MEN ", "")
 st.markdown(f"""
-<div style='text-align: center; margin: 8px 0 4px 0;'>
-    <div style='
-        font-family: "Playfair Display", serif;
-        font-size: 13px;
-        letter-spacing: 0.4em;
-        color: #1E3A8A;
-        font-weight: 700;
-        margin-bottom: 12px;
-    '>EIGHT MEN</div>
-    <h3 style='
-        margin: 0;
-        padding: 0;
-        text-align: center;
-        word-break: keep-all;
-        overflow-wrap: anywhere;
-        font-family: "Playfair Display", "Noto Serif JP", serif;
-        font-size: clamp(26px, 8.5vw, 36px);
-        font-weight: 800;
-        letter-spacing: 0.03em;
-        line-height: 1.25;
-        width: 100%;
-        color: #0F0F0F;
-    '>{store_short_name}</h3>
-    <div style='
-        width: 48px;
-        height: 1px;
-        background: #0F0F0F;
-        margin: 22px auto 4px auto;
-    '></div>
+<div class="store-head">
+    <div class="store-brand">EIGHT MEN</div>
+    <h3 class="store-name">{store_short_name}</h3>
+    <div class="store-sub">ご来店ありがとうございました</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -750,7 +691,7 @@ st.divider()
 
 # --- AIにお任せ ---
 st.markdown("#### AIにお任せする方はこちら")
-st.markdown("<p style='color: #666; font-size: 13px; letter-spacing: 0.03em; margin-top: -8px;'>簡単な質問に答えるだけで、下書きを作成します。</p>", unsafe_allow_html=True)
+st.markdown("<p class='lead'>質問に答えるだけで、口コミの下書きを作成します。</p>", unsafe_allow_html=True)
 
 
 # --- 📝 入力フォーム ---
@@ -1011,72 +952,62 @@ if submit_button:
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{
-    font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic Medium", "Noto Sans JP", sans-serif;
     background: transparent;
-    letter-spacing: 0.02em;
+    color: #1a2530;
+    -webkit-font-smoothing: antialiased;
   }}
   .review-card {{
-    background: #FFFFFF;
-    border: 1px solid #D8D2C5;
-    border-radius: 2px;
-    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e7e9ec;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 1px 2px rgba(16,37,48,.04), 0 6px 20px rgba(16,37,48,.05);
   }}
   .review-label {{
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.4em;
-    color: #1E3A8A;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    color: #1d96b4;
+    margin-bottom: 8px;
   }}
   .review-text {{
     font-size: 14px;
     line-height: 1.85;
-    color: #0F0F0F;
+    color: #1a2530;
     white-space: pre-wrap;
     margin-bottom: 20px;
   }}
   .copy-btn {{
     width: 100%;
-    padding: 18px;
-    background: #D97706;
-    color: #FFFFFF;
+    padding: 16px;
+    background: #1d96b4;
+    color: #ffffff;
     border: none;
-    border-radius: 2px;
-    font-family: "Inter", "Noto Sans JP", -apple-system, sans-serif;
+    border-radius: 10px;
+    font-family: inherit;
     font-size: 15px;
     font-weight: 700;
-    letter-spacing: 0.15em;
+    letter-spacing: .04em;
     cursor: pointer;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+    transition: background .15s;
   }}
-  .copy-btn:hover {{
-    background: #B45309;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 24px rgba(217, 119, 6, 0.45);
-  }}
-  .copy-btn:active {{ transform: translateY(0); }}
-  .copy-btn.copied {{
-    background: #16A34A;
-    box-shadow: 0 6px 18px rgba(22, 163, 74, 0.3);
-    letter-spacing: 0.2em;
-  }}
+  .copy-btn:hover {{ background: #18809a; }}
+  .copy-btn.copied {{ background: #15803d; }}
 </style>
 <div class="review-card">
-  <div class="review-label">Generated Review</div>
+  <div class="review-label">生成された口コミ</div>
   <div class="review-text" id="review-text">{escaped_review}</div>
-  <button class="copy-btn" id="copy-btn" onclick="copyReview()">📋 口コミをコピーする</button>
+  <button class="copy-btn" id="copy-btn" onclick="copyReview()">口コミをコピーする</button>
 </div>
 <script>
   function copyReview() {{
     const text = document.getElementById('review-text').innerText;
     const btn = document.getElementById('copy-btn');
     navigator.clipboard.writeText(text).then(() => {{
-      btn.textContent = '✓ コピーしました！';
+      btn.textContent = 'コピーしました';
       btn.classList.add('copied');
       setTimeout(() => {{
-        btn.textContent = '📋 口コミをコピーする';
+        btn.textContent = '口コミをコピーする';
         btn.classList.remove('copied');
       }}, 3000);
     }});
@@ -1111,15 +1042,10 @@ if submit_button:
                 # 保存ログは社内用。お客様の画面に内部エラーを出さず、サーバーログにだけ残す
                 print(f"[review_logs] 保存失敗: {err}")
 
-            st.markdown(f"""<a href="{selected_store_link}" target="_blank" style="text-decoration: none;"><button style="width: 100%; background: #1E3A8A; color: #FFFFFF; padding: 20px; border: none; border-radius: 2px; font-weight: 600; margin-top: 16px; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);">Googleマップを開いて投稿する</button></a>""", unsafe_allow_html=True)
+            st.markdown(f"""<a href="{selected_store_link}" target="_blank" class="post-btn">Googleマップを開いて投稿する</a>""", unsafe_allow_html=True)
 
         except Exception as e:
             st.error("エラーが発生しました。APIキーを確認してください。")
 
-# --- フッター・サイン ---
-st.markdown("""
-<div class="footer-mark">
-    EIGHT MEN
-    <div class="footer-sub">Be Your Style · Be Your Voice</div>
-</div>
-""", unsafe_allow_html=True)
+# --- フッター ---
+st.markdown('<div class="footer-mark">EIGHT MEN</div>', unsafe_allow_html=True)
