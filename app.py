@@ -356,37 +356,38 @@ st.markdown("""
         max-width: 560px;
     }
 
-    /* ====== 店舗ヘッダー ====== */
+    /* ====== 店舗ヘッダー：ティール塗りの帯でページの主役にする ====== */
     .store-head {
-        background: var(--surface);
-        border: 1px solid var(--line);
+        background: linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 78%, #0f1b23) 100%);
         border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 22px 20px;
-        text-align: center;
+        box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 28%, transparent);
+        padding: 26px 22px 24px;
+        text-align: left;
     }
     .store-brand {
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 700;
-        letter-spacing: .14em;
-        color: var(--accent);
-        margin-bottom: 4px;
+        letter-spacing: .16em;
+        color: rgba(255,255,255,.78);
+        margin-bottom: 6px;
     }
     .store-name {
         margin: 0 !important;
         padding: 0 !important;
-        font-size: clamp(22px, 7vw, 28px) !important;
-        font-weight: 700 !important;
-        line-height: 1.3 !important;
+        font-size: clamp(28px, 9vw, 36px) !important;
+        font-weight: 800 !important;
+        line-height: 1.2 !important;
         letter-spacing: .02em !important;
         word-break: keep-all;
         overflow-wrap: anywhere;
-        color: var(--ink) !important;
+        color: #ffffff !important;
     }
     .store-sub {
-        margin-top: 6px;
-        font-size: 12.5px;
-        color: var(--ink-3);
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255,255,255,.22);
+        font-size: 13px;
+        color: rgba(255,255,255,.88);
     }
 
     /* ====== ボタン ====== */
