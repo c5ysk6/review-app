@@ -356,38 +356,32 @@ st.markdown("""
         max-width: 560px;
     }
 
-    /* ====== 店舗ヘッダー：ティール塗りの帯でページの主役にする ====== */
+    /* ====== 店舗ヘッダー：淡いティールの面で、重くせずに目立たせる ====== */
     .store-head {
-        background: linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 78%, #0f1b23) 100%);
+        background: var(--accent-soft);
+        border: 1px solid var(--accent-line);
+        border-left: 4px solid var(--accent);
         border-radius: var(--radius);
-        box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 28%, transparent);
-        padding: 26px 22px 24px;
+        padding: 18px 20px;
         text-align: left;
     }
     .store-brand {
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 700;
         letter-spacing: .16em;
-        color: rgba(255,255,255,.78);
-        margin-bottom: 6px;
+        color: var(--accent);
+        margin-bottom: 2px;
     }
     .store-name {
         margin: 0 !important;
         padding: 0 !important;
-        font-size: clamp(28px, 9vw, 36px) !important;
+        font-size: clamp(26px, 8vw, 32px) !important;
         font-weight: 800 !important;
-        line-height: 1.2 !important;
+        line-height: 1.25 !important;
         letter-spacing: .02em !important;
         word-break: keep-all;
         overflow-wrap: anywhere;
-        color: #ffffff !important;
-    }
-    .store-sub {
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(255,255,255,.22);
-        font-size: 13px;
-        color: rgba(255,255,255,.88);
+        color: var(--ink) !important;
     }
 
     /* ====== ボタン ====== */
@@ -676,7 +670,6 @@ st.markdown(f"""
 <div class="store-head">
     <div class="store-brand">EIGHT MEN</div>
     <h3 class="store-name">{store_short_name}</h3>
-    <div class="store-sub">ご来店ありがとうございました</div>
 </div>
 """, unsafe_allow_html=True)
 
