@@ -621,38 +621,30 @@ st.markdown("""
         display: inline-block !important;
     }
 
-    /* ====== ステップ5：CSS Grid + dense flow ====== */
-    /* デスクトップ3列・スマホ2列。サブ選択肢は該当カード直下に全幅で挿入。
-       重要：.st-key-atm_grid を直接ターゲット（descendant指定にすると
-       サブコンテナ自身もstVerticalBlockなのでgrid化されてしまう） */
-    .st-key-atm_grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        grid-auto-flow: dense !important;
-        gap: 10px !important;
+    /* ====== ステップ6：1列カード・詳細はカード内に展開 ====== */
+    .st-key-atm_list {
+        gap: 8px !important;
     }
-    @media (max-width: 640px) {
-        .st-key-atm_grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
-    /* グリッド内のカード余白はgapで管理するのでmargin-bottom削除 */
-    .st-key-atm_grid [data-testid="stVerticalBlockBorderWrapper"] {
+    .st-key-atm_list [class*="st-key-atm_card_"] {
+        gap: 0 !important;
         margin-bottom: 0 !important;
     }
-
-    /* サブコンテナ（grid item）を全幅spanさせる：
-       grid直下のstElementContainer内にst-key-atm_subs_X要素があるものを対象 */
-    .st-key-atm_grid > [data-testid="stElementContainer"]:has([class*="st-key-atm_subs_"]) {
-        grid-column: 1 / -1 !important;
+    /* チェック済みのカードは枠を濃くして選択状態を明示 */
+    .st-key-atm_list [class*="st-key-atm_card_"]:has(input[type="checkbox"]:checked),
+    .st-key-atm_list [data-testid="stVerticalBlockBorderWrapper"]:has(input[type="checkbox"]:checked) {
+        border-color: #1E3A8A !important;
+        box-shadow: inset 3px 0 0 #1E3A8A;
     }
-    .st-key-atm_grid [class*="st-key-atm_subs_"] {
-        padding: 4px 0 8px 0 !important;
-        border-left: none !important;
+    /* カード内の詳細エリア：区切り線の下にまとめる */
+    .st-key-atm_list [class*="st-key-atm_subs_"] {
+        border-top: 1px solid #EEE9DF !important;
+        margin: 0 12px !important;
+        padding: 12px 0 14px 0 !important;
+        width: auto !important;
         background: transparent !important;
     }
     /* サブ選択肢ピルを左詰め横並び＋お悩み・来店動機と同じ丸角オーバル形状 */
-    .st-key-atm_grid [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] {
+    .st-key-atm_list [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] {
         display: flex !important;
         flex-direction: row !important;
         justify-content: flex-start !important;
@@ -660,7 +652,7 @@ st.markdown("""
         gap: 8px !important;
         width: 100% !important;
     }
-    .st-key-atm_grid [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] button {
+    .st-key-atm_list [class*="st-key-atm_subs_"] div[data-baseweb="button-group"] button {
         border-radius: 999px !important;
         padding: 8px 18px !important;
         font-size: 12px !important;
@@ -903,33 +895,34 @@ st.markdown('<span class="step-label"><span class="step-number">06</span>良か�
 
 atmospheres = []
 atmosphere_subdetails = {}
-with st.container(key="atm_grid"):
-    for idx, item in enumerate(ATMOSPHERE_LIST):
-        with st.container(border=True):
-            checked = st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}")
-        if checked:
-            atmospheres.append(item)
-            if ATMOSPHERE_SUBOPTIONS.get(item):
-                with st.container(key=f"atm_subs_{idx}"):
-                    st.markdown(f'<div class="sub-category-label">{item}</div>', unsafe_allow_html=True)
-                    sel = st.pills(
-                        f"{item}_詳細",
-                        ATMOSPHERE_SUBOPTIONS[item],
-                        selection_mode="multi",
-                        default=[],
-                        key=f"atm_sub_{item}",
-                        label_visibility="collapsed",
-                    )
-                    if sel:
-                        atmosphere_subdetails[item] = sel
-
 atmosphere_detail = ""
-if atmospheres and "その他" in atmospheres:
-    atmosphere_detail = st.text_input(
-        "雰囲気・接客の詳細（その他）", 
-        placeholder="その他：スタッフの対応や店内の様子など", 
-        label_visibility="collapsed"
-    )
+# 詳細はチェックしたカードの「中」に展開する（カード外に出すとどのカードの詳細か分からなくなる）
+with st.container(key="atm_list"):
+    for idx, item in enumerate(ATMOSPHERE_LIST):
+        with st.container(border=True, key=f"atm_card_{idx}"):
+            checked = st.checkbox(f"{ATMOSPHERE_ICONS[item]} {item}", key=f"atm_{item}")
+            if checked:
+                atmospheres.append(item)
+                if ATMOSPHERE_SUBOPTIONS.get(item):
+                    with st.container(key=f"atm_subs_{idx}"):
+                        st.markdown('<div class="sub-category-label">当てはまるものをタップ（任意）</div>', unsafe_allow_html=True)
+                        sel = st.pills(
+                            f"{item}_詳細",
+                            ATMOSPHERE_SUBOPTIONS[item],
+                            selection_mode="multi",
+                            default=[],
+                            key=f"atm_sub_{item}",
+                            label_visibility="collapsed",
+                        )
+                        if sel:
+                            atmosphere_subdetails[item] = sel
+                elif item == "その他":
+                    with st.container(key=f"atm_subs_{idx}"):
+                        atmosphere_detail = st.text_input(
+                            "雰囲気・接客の詳細（その他）",
+                            placeholder="スタッフの対応や店内の様子など",
+                            label_visibility="collapsed",
+                        )
 
 st.write("")
 submit_button = st.button("口コミを生成する")
