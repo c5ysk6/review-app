@@ -3,7 +3,7 @@ import html as html_mod
 import random
 import streamlit as st
 import streamlit.components.v1 as components
-from openai import OpenAI
+from openai import OpenAI, BadRequestError
 import pandas as pd
 
 
@@ -205,6 +205,39 @@ REVIEW_CLOSINGS = [
     "店やエリアの使いやすさ・通いやすさに触れて終える",
     "次に頼んでみたいメニューや今後の希望に触れて終える",
     "担当者やお店への感謝を、かしこまりすぎない言い方で書いて終える",
+]
+
+# --- 「毎回変えて」「場合によっては」はモデルには実行できない ---
+# 生成は1回ごとに独立しており、モデルは前回の出力を知らない。
+# プロンプトで揺らぎを頼むと毎回いちばん無難な選択に収束するため、
+# 揺らぎはすべてここでコード側の乱数として決め、プロンプトには確定した指示として渡す。
+
+# 来店回数の扱い（言い回し例を見せると丸写しされるため、方針だけを渡す）
+VISIT_MODES_FIRST = [
+    "初めての来店だったことに、文の途中でさりげなく触れる",
+    "初めての来店だったことを、来店前の不安や期待と絡めて書く",
+    "初めての来店かどうかには触れない",
+]
+VISIT_MODES_REPEAT = [
+    "通い続けていることを、回数の数字を使わずに自分の言葉で匂わせる",
+    "前回までと比べて今回どうだったか、という視点を一言入れる（回数の数字は出さない）",
+    "来店回数・継続利用には一切触れない",
+]
+
+# 「メンズ」を置く位置（毎回文末に付け足すパターンへの収束を防ぐ）
+MENS_PLACEMENTS = [
+    "メニュー名として（例：メンズカット）",
+    "お店の種類として（例：メンズ専門・メンズサロン）",
+    "書き出しの1文目のどこか",
+    "最後の1文のどこか",
+]
+
+# 文末の語尾（「〜ました。〜と思います。」の連続を防ぐ）
+ENDING_STYLES = [
+    "「〜ました」で終わる文を続けすぎず、「〜です」「〜ています」も混ぜる",
+    "「〜と思います」は使わない",
+    "1文だけ「〜でした！」のように少し感情が出る語尾を使う（敬語は保つ）",
+    "淡々とした語尾で、感想を盛りすぎない",
 ]
 
 # 文量（短文〜やや詳しめまで振る）
@@ -934,6 +967,24 @@ if submit_button:
         )
         structure = random.choice(REVIEW_STRUCTURES)
         closing = random.choice(REVIEW_CLOSINGS)
+        visit_mode = random.choice(VISIT_MODES_FIRST if visit_count == "初回" else VISIT_MODES_REPEAT)
+        mens_placement = random.choice(MENS_PLACEMENTS)
+        ending_style = random.choice(ENDING_STYLES)
+        area_rule = (
+            f"エリア名「{area_keyword}」を、生活圏・行動パターンに溶け込ませて1回入れる（「{area_keyword}のこのお店」のような言い方は避ける）"
+            if random.random() < 0.5
+            else "エリア名・地名は入れない"
+        )
+
+        staff_rule = (
+            f"・担当者名「{staff_last_name}さん」を必ず1回以上、自然な形で書く"
+            if staff_specified
+            else ""
+        )
+
+        # 入力が同じ客同士で中身まで揃わないよう、主役にする要素をコード側で1つ決める
+        focus_candidates = motivation_text_parts + atmosphere_text_parts + (menu or [])
+        focus = random.choice(focus_candidates) if focus_candidates else menu_text
 
         # 選択項目が多いときに短文枠を引くと拾いきれないため、情報量に応じて文量枠を絞る
         # （REVIEW_LENGTHS は短い順に並んでいる前提）
@@ -970,7 +1021,12 @@ if submit_button:
 ---
 【今回の書き方の指定 ― 必ずこの通りにする】
 ・文章の骨格：{structure}
+・いちばん厚く書く要素：{focus}
 ・締め方：{closing}
+・来店回数：{visit_mode}
+・エリア：{area_rule}
+・「メンズ」の位置：{mens_placement}
+・語尾：{ending_style}
 ・文量：{length_spec}（上限150文字は絶対に超えない）
 
 ---
@@ -983,34 +1039,34 @@ if submit_button:
 ・文体は必ず敬語（です・ます調）で統一する。タメ口・体言止めは使わない
 ・上の実例のように、説明くさくなく、スマホで打ったような自然な敬語で書く
 ・書き出しの一文は、参考例と同じ入り方をしない。骨格の指定に沿って自分で入口を決める
-・エリア名「{area_keyword}」は「{area_keyword}のこのお店」という不自然な言い方は避け、生活圏・行動パターンに溶け込ませる。骨格上どうしても不自然になる場合は無理に入れない
-・「メンズ」という言葉をどこかに自然な形で含める（例：メンズカット・メンズ向け・メンズサロン）。ただし置く位置は毎回変え、文末に付け足すパターンばかりにしない
-・「正解だった」「至福の」「プロフェッショナルな」「強くお勧め」は使わない
+・「メンズ」という言葉を、上で指定した位置に自然な形で必ず1回含める
+{staff_rule}
+・「正解だった」「至福の」「プロフェッショナルな」「強くお勧め」「いつもお世話になっています」は使わない
 ・「丁寧に対応していただきました」「大変満足しています」のような、どの店にも当てはまる無難な一文で埋めない。入力情報にある具体を必ず1つ以上、体験として書く
 {coverage_rule}
 ・入力情報の項目名をそのまま「〜を希望し」「〜という動機で」のような申請書・ビジネス文書的な言い方に変換しない。「イメチェンしたくて」「思い切ってイメチェンしようと」のように、話し言葉に近い自然な理由の書き方に言い換える
 ・担当が「（担当者名の指定なし）」の場合、「スタッフさんにお願いしました」のように人名扱いで書かない。個人名を使わず「{selected_store_name}にお願いしました」「{selected_store_name}で仕上げてもらいました」のように店名を主語にして自然に書く
-
-【来店回数の触れ方】
-・来店が2回目・3回以上の場合、「2回目です」「3回目になります」のように回数の数字をそのまま述べる言い方は避ける。数字を出さずに継続利用を匂わせる、間接的な書き方を優先する
-　（間接表現の例：「前回の仕上がりが良かったので、また◯◯さんにお願いしました」「いつもお世話になっています」「毎回この髪型でお願いしていますが」「以前お願いして良かったので、今回もこちらに」「◯◯さんの技術はいつも安心できます」など。前回の満足・継続利用を匂わせつつ数字は言わない）
-　- 上記は例であり、そのまま使い回さず毎回違う言い回しを選ぶこと
-・初回の場合は「初めて伺いました」「初めてお願いしたのですが」のように、数字ではなく「初めて」を使った自然な言い方でよい。ただし言い回し・置く位置は毎回変える
-・来店回数への言及を文頭に置くパターンを毎回選ばない。文中や文末に自然に織り込むことを優先する
-・場合によっては来店回数に一切触れず、担当者や仕上がりの話だけで自然に完結させてもよい
+・来店回数に触れる場合も、「2回目です」「3回目になります」のように回数の数字は出さない
 """
         user_content = f"担当：{staff_display}、メニュー：{menu_text}、来店：{visit_count}、悩み：{motivation_final_text}、良かった点：{atmosphere_final_text}"
 
         try:
             with st.spinner("AIが文章を考えています..."):
                 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}],
-                    temperature=0.95,
-                    presence_penalty=0.4,
-                    frequency_penalty=0.3,
-                )
+                messages = [{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}]
+                # gpt-4o-mini は 2027-01-14 にAPI停止。後継の gpt-6-luna へ移行。
+                # 新世代モデルはサンプリング系パラメータを受け付けない場合があるため、
+                # 400系で弾かれたらパラメータなしで再試行する（揺らぎはコード側の乱数で担保済み）
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-6-luna",
+                        messages=messages,
+                        temperature=0.95,
+                        presence_penalty=0.4,
+                        frequency_penalty=0.3,
+                    )
+                except BadRequestError:
+                    response = client.chat.completions.create(model="gpt-6-luna", messages=messages)
                 review_text = response.choices[0].message.content
 
             escaped_review = html_mod.escape(review_text)
