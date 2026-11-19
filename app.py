@@ -504,59 +504,11 @@ st.markdown("""
         border-left: 3px solid #1E3A8A;
     }
 
-    /* ====== ブランド・ウォードマーク（最上段） ====== */
-    .brand-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 4px 18px 4px;
-        border-bottom: 1px solid #D8D2C5;
-        margin-bottom: 28px;
-    }
-    .brand-mark {
-        font-family: "Playfair Display", serif;
-        font-size: 18px;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        color: #0F0F0F;
-    }
-    .brand-tag {
-        font-size: 9px;
-        letter-spacing: 0.4em;
-        color: #6B6B6B;
-        font-weight: 600;
-        text-transform: uppercase;
+    /* ====== Streamlit標準ヘッダー（Deploy・メニュー）を非表示 ====== */
+    header[data-testid="stHeader"] {
+        display: none !important;
     }
 
-    /* ====== ステップ・プログレス・インジケーター ====== */
-    .progress-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 8px 0 28px 0;
-        padding: 4px 0;
-    }
-    .progress-step {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: transparent;
-        border: 1px solid #0F0F0F;
-        color: #0F0F0F;
-        font-family: "Playfair Display", serif;
-        font-weight: 600;
-        font-size: 12px;
-        flex-shrink: 0;
-    }
-    .progress-line {
-        flex: 1;
-        height: 1px;
-        background: #D8D2C5;
-        margin: 0 4px;
-    }
     .progress-eyebrow {
         text-align: center;
         font-size: 10px;
@@ -716,13 +668,6 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- ブランドバー（最上段） ---
-st.markdown("""
-<div class="brand-bar">
-    <div class="brand-mark">EIGHT MEN</div>
-    <div class="brand-tag">Style · Cut · Life</div>
-</div>
-""", unsafe_allow_html=True)
 
 # --- 📥 データ読み込み ---
 @st.cache_data(ttl=600)
@@ -758,30 +703,32 @@ selected_store_link = STORES[selected_store_name]
 area_keyword = STORE_AREAS.get(selected_store_name, "駅近")
 
 # --- 店舗名表示（エディトリアル） ---
+# 「EIGHT MEN」は小見出しに分け、大きく出すのは店舗名だけ（長い店名でも省略されないように）
+store_short_name = selected_store_name.replace("EIGHT MEN ", "")
 st.markdown(f"""
-<div style='text-align: center; margin: 20px 0 4px 0;'>
+<div style='text-align: center; margin: 8px 0 4px 0;'>
     <div style='
-        font-size: 11px;
-        letter-spacing: 0.45em;
+        font-family: "Playfair Display", serif;
+        font-size: 13px;
+        letter-spacing: 0.4em;
         color: #1E3A8A;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-bottom: 14px;
-    '>Guest Review</div>
+        font-weight: 700;
+        margin-bottom: 12px;
+    '>EIGHT MEN</div>
     <h3 style='
         margin: 0;
+        padding: 0;
         text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
         font-family: "Playfair Display", "Noto Serif JP", serif;
-        font-size: 36px;
+        font-size: clamp(26px, 8.5vw, 36px);
         font-weight: 800;
         letter-spacing: 0.03em;
-        line-height: 1.1;
+        line-height: 1.25;
         width: 100%;
         color: #0F0F0F;
-    '>{selected_store_name}</h3>
+    '>{store_short_name}</h3>
     <div style='
         width: 48px;
         height: 1px;
@@ -805,22 +752,6 @@ st.divider()
 st.markdown("#### AIにお任せする方はこちら")
 st.markdown("<p style='color: #666; font-size: 13px; letter-spacing: 0.03em; margin-top: -8px;'>簡単な質問に答えるだけで、下書きを作成します。</p>", unsafe_allow_html=True)
 
-# --- ステップ・プログレス ---
-st.markdown("""
-<div class="progress-wrap">
-    <div class="progress-step">1</div>
-    <div class="progress-line"></div>
-    <div class="progress-step">2</div>
-    <div class="progress-line"></div>
-    <div class="progress-step">3</div>
-    <div class="progress-line"></div>
-    <div class="progress-step">4</div>
-    <div class="progress-line"></div>
-    <div class="progress-step">5</div>
-    <div class="progress-line"></div>
-    <div class="progress-step">6</div>
-</div>
-""", unsafe_allow_html=True)
 
 # --- 📝 入力フォーム ---
 st.markdown('<span class="step-label"><span class="step-number">01</span>担当スタッフ</span>', unsafe_allow_html=True)
