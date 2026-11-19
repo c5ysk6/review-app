@@ -840,7 +840,10 @@ if not current_staff_list:
     current_staff_list = staff_data_dict.get(old_names[0], []) if old_names else []
 
 if not current_staff_list:
-    current_staff_list = staff_data_dict.get(selected_store_name, ["指定しない"])
+    current_staff_list = staff_data_dict.get(selected_store_name, [])
+
+# 「指定しない」はシートに依存せず常に先頭に置く
+current_staff_list = ["指定しない"] + [s for s in current_staff_list if isinstance(s, str) and s.strip() and s != "指定しない"]
 
 staff_name = st.selectbox("担当スタッフ", current_staff_list, label_visibility="collapsed")
 
