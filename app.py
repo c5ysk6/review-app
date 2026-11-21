@@ -56,6 +56,7 @@ STORES = {
     "EIGHT MEN 吉祥寺南口店": "https://g.page/r/CUFrBrlWrjwaEAE/review",
     "EIGHT MEN 博多店": "https://g.page/r/Cfs_-7LhTWtDEAE/review",
     "EIGHT MEN 那覇新都心店": "https://g.page/r/CU_5fyrZxjvwEAE/review",
+    "EIGHT MEN 天神大名店": "https://g.page/r/CdPtJJT-D7pIEAE/review",
     "EIGHT MEN 藤沢店": "https://g.page/r/CVIbotoazgOpEBM/review",
     "EIGHT MEN 吉祥寺北口店": "https://g.page/r/Cbj-Wa4U8z8XEBM/review",
 }
@@ -76,6 +77,7 @@ STORE_AREAS = {
     "EIGHT MEN 吉祥寺南口店": "吉祥寺",
     "EIGHT MEN 博多店": "博多",
     "EIGHT MEN 那覇新都心店": "那覇新都心・おもろまち",
+    "EIGHT MEN 天神大名店": "天神・大名",
     "EIGHT MEN 藤沢店": "藤沢",
     "EIGHT MEN 吉祥寺北口店": "吉祥寺",
 }
